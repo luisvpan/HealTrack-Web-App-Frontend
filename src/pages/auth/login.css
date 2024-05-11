@@ -1,0 +1,20 @@
+.login-title {
+  font-size: xx-large;
+  display: flex;
+  justify-content: center;
+}
+
+.login-image {
+  margin-bottom: 32px;
+}
+
+.login-input {
+  font-size: large;
+  margin-bottom: 32px;
+}
+
+.login-button {
+  width: 100%;
+  font-size: large;
+  font-weight: 600;
+}
