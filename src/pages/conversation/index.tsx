@@ -34,11 +34,13 @@ const Conversation: React.FC = () => {
               className="back-icon"
               onClick={handleClick}
             ></IonIcon>
-            <IonAvatar>
+            <IonAvatar className="ion-avatar">
               <img src="https://i.pravatar.cc/300" />
             </IonAvatar>
             <span className="details">
-              <h1>Alejandro Rosas</h1>
+              <h1>Alejandro Rosas {" "}
+                <span className="role">(Enfermero)</span>
+              </h1>
               <p>En línea</p>
             </span>
           </div>

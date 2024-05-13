@@ -7,6 +7,12 @@
   .back-icon {
     font-size: 3rem;
     opacity: 0.2;
+    margin-left: 10px;
+  }
+
+  .ion-avatar {
+    height: 50px;
+    width: 50px;
   }
 
   .details {
@@ -30,6 +36,9 @@
       opacity: 0.7;
       margin-top: 5px;
       font-size: 0.8rem;
+    }
+    .role {
+      color: #ff87af;
     }
   }
 }
