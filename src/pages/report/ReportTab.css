@@ -1,0 +1,34 @@
+.question-list {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  margin-left: 20px;
+  margin-right: 20px;
+
+  .question {
+    background-color: #262626;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    p {
+      text-align: center;
+    }
+  }
+}
+
+.radius-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.daily-report {
+  display: flex;
+  flex-direction: column;
+}
+
+.ion-button {
+  display: flex;
+  width: 80%;
+}

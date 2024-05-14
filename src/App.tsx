@@ -13,7 +13,6 @@ import { IonReactRouter } from "@ionic/react-router";
 import { alarm, chatbubbles, home } from "ionicons/icons";
 import HomeTab from "./pages/home";
 import MessagesTab from "./pages/messages";
-import Tab3 from "./pages/Tab3";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -46,6 +45,7 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./theme/variables.css";
 import Login from "./pages/auth/Login";
 import Conversation from "./pages/conversation";
+import ReportTab from "./pages/report";
 
 setupIonicReact();
 
@@ -80,6 +80,9 @@ const AppContent: React.FC = () => {
         <Route exact path="/">
           <Redirect to="/tab1" />
         </Route>
+        <Route exact path="/report">
+          <ReportTab />
+        </Route>
       </IonRouterOutlet>
 
       <IonTabBar slot={location.pathname !== "/login" ? "bottom" : undefined}>
@@ -91,7 +94,7 @@ const AppContent: React.FC = () => {
           <IonIcon aria-hidden="true" icon={chatbubbles} />
           <IonLabel>Mensajes</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab3" href="/tab3">
+        <IonTabButton tab="report" href="/report">
           <IonIcon aria-hidden="true" icon={alarm} />
           <IonLabel>Reporte</IonLabel>
         </IonTabButton>
