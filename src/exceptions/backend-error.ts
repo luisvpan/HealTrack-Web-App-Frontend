@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { IBackendError, BackendErrorItem } from "services/types";
+import { BackendErrorItem, IBackendError } from "../services/types";
 
 const ILEGILITY_ERROR_MESSAGE = "Error ilegible del servidor";
 
