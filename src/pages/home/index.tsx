@@ -8,8 +8,11 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import "./HomeTab.css";
+import store from "../../store";
 
 const HomeTab: React.FC = () => {
+  console.log(store.getState());
+
   return (
     <IonPage>
       <IonHeader>

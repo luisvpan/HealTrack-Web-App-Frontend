@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginResponse } from "services/auth/login";
+
 import { AuthState } from "./types";
 import { hasStorageData } from "./hasStorageData";
 import { getStorageData } from "./getStorageData";
 import { setStorageData } from "./setStorageData";
 import { clearStorageData } from "./clearStorageData";
+import { LoginResponse } from "../../services/auth/login";
 
 const initialState: AuthState = hasStorageData()
   ? {

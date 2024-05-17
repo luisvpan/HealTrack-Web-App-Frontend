@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import config from 'config';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import config from "../config";
 
 // ==============================|| CUSTOMIZATION SLICE ||============================== //
 
@@ -17,7 +17,7 @@ export interface CustomizationState {
 
 const initialState: CustomizationState = {
   isOpen: [], // for active default menu
-  defaultId: 'default',
+  defaultId: "default",
   fontFamily: config.fontFamily,
   borderRadius: config.borderRadius,
   opened: true,
@@ -28,7 +28,7 @@ const initialState: CustomizationState = {
 };
 
 const customizationSlice = createSlice({
-  name: 'customization',
+  name: "customization",
   initialState,
   reducers: {
     openMenu(state, action: PayloadAction<string>) {

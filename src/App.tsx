@@ -47,15 +47,20 @@ import Login from "./pages/auth/Login";
 import Conversation from "./pages/conversation";
 import ReportTab from "./pages/report";
 
+import { Provider } from "react-redux";
+import store from "./store";
+
 setupIonicReact();
 
 const App: React.FC = () => {
   return (
-    <IonApp>
-      <IonReactRouter>
-        <AppContent />
-      </IonReactRouter>
-    </IonApp>
+    <Provider store={store}>
+      <IonApp>
+        <IonReactRouter>
+          <AppContent />
+        </IonReactRouter>
+      </IonApp>
+    </Provider>
   );
 };
 
@@ -74,7 +79,7 @@ const AppContent: React.FC = () => {
         <Route exact path="/messages">
           <MessagesTab />
         </Route>
-        <Route path="/conversation">
+        <Route path="/conversation/:otherId">
           <Conversation />
         </Route>
         <Route exact path="/">

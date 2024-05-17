@@ -11,18 +11,28 @@ import LoginImage from "./loginImage.png";
 import "./login.css";
 import { useHistory } from "react-router";
 import login from "../../services/auth/login";
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback } from "react";
+import { useAppDispatch } from "../../store";
+import { authUser } from "../../store/authSlice";
 
 const Login: React.FC = () => {
   const history = useHistory();
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
+  const dispatch = useAppDispatch();
   const onLoginSubmit = useCallback(async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
-      await login({ email, password });
+      const form = event.target as HTMLFormElement;
+      const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+      const passwordInput = form.elements.namedItem(
+        "password"
+      ) as HTMLInputElement;
+
+      const user = await login({
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+
+      dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
       console.log(error);
@@ -36,15 +46,16 @@ const Login: React.FC = () => {
         <form onSubmit={onLoginSubmit}>
           <IonText className="login-title">HealTrack</IonText>
           <IonInput
+            name="email"
             placeholder="Correo"
             className="login-input"
-            onIonChange={(e) => setEmail(e.target.value as string)}
           ></IonInput>
+
           <IonInput
             placeholder="Contraseña"
             type="password"
+            name="password"
             className="login-input"
-            onIonChange={(e) => setPassword(e.target.value as string)}
           ></IonInput>
           <IonButton className="login-button" type="submit">
             Iniciar Sesión
