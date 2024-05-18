@@ -13,6 +13,7 @@ import store from "../../store";
 const HomeTab: React.FC = () => {
   console.log(store.getState());
 
+  const user = store.getState().auth.user;
   return (
     <IonPage>
       <IonHeader>
@@ -21,7 +22,7 @@ const HomeTab: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonText>¡Bienvenido Rodolfo!</IonText>
+        <IonText>¡Bienvenido a HealTrack!</IonText>
       </IonContent>
     </IonPage>
   );
