@@ -40,13 +40,13 @@ import "@ionic/react/css/display.css";
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
 import "@ionic/react/css/palettes/dark.system.css";
-
+import "react-toastify/dist/ReactToastify.css";
 /* Theme variables */
 import "./theme/variables.css";
 import Login from "./pages/auth/Login";
 import Conversation from "./pages/conversation";
 import ReportTab from "./pages/report";
-
+import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
 
@@ -58,6 +58,7 @@ const App: React.FC = () => {
       <IonApp>
         <IonReactRouter>
           <AppContent />
+          <ToastContainer />
         </IonReactRouter>
       </IonApp>
     </Provider>

@@ -50,3 +50,17 @@ export interface ChatInfo {
   users: User[];
   created_by: User;
 }
+
+export interface Report {
+  id: number;
+  isRespondingForEmployee: boolean;
+  hasHighTemperature: boolean;
+  hasRedness: boolean;
+  hasSwelling: boolean;
+  hasSecretions: boolean;
+  fileUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  user: User;
+}

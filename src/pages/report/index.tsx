@@ -11,10 +11,12 @@ import {
   IonRadio,
   IonRadioGroup,
   IonTitle,
+  IonToast,
   IonToolbar,
 } from "@ionic/react";
 import "./ReportTab.css";
 import { cameraOutline } from "ionicons/icons";
+import useSubmitReport from "./use-submit-report";
 
 const reportQuestions = [
   "Tiene temperatura mayor de 38,5 °C",
@@ -25,7 +27,6 @@ const reportQuestions = [
 
 const ReportTab: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
-
   const [answers, setAnswers] = useState(
     Array(reportQuestions.length).fill(null)
   );
@@ -36,13 +37,13 @@ const ReportTab: React.FC = () => {
     setAnswers(newAnswers);
   };
 
+  const onReportSubmit = useSubmitReport();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Función para manejar la subida de archivos
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Aquí puedes manejar el archivo subido
       console.log(file);
     }
   };
@@ -85,6 +86,8 @@ const ReportTab: React.FC = () => {
                 onClick={() => {
                   if (answers.filter((answer) => answer === true).length > 1) {
                     setOpen(true);
+                  } else {
+                    onReportSubmit(answers);
                   }
                 }}
               >
@@ -118,7 +121,13 @@ const ReportTab: React.FC = () => {
             </div>
             <div className="buttons-container">
               <IonButton onClick={() => setOpen(false)}>Cerrar</IonButton>
-              <IonButton onClick={() => setOpen(false)}>Enviar</IonButton>
+              <IonButton
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Enviar
+              </IonButton>
             </div>
           </div>
         </IonContent>
