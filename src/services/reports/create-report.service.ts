@@ -10,7 +10,6 @@ export default async function createReport(
   body: CreateReportBody
 ): Promise<any> {
   try {
-    console.log(store.getState().auth.token);
     const response = await axios.post(`${URL}`, body, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,

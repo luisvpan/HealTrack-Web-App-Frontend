@@ -8,7 +8,7 @@ const useSubmitReport = () => {
   const role = store.getState().auth.user?.role;
   const successToast = useSuccessToast();
   const history = useHistory();
-  const onSubmit = useCallback(async (report: any, file: File) => {
+  const onSubmit = useCallback(async (report: any, file?: File) => {
     try {
       const body = {
         hasHighTemperature: report[0],

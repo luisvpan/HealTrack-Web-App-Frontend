@@ -42,3 +42,29 @@
     font-size: 1.5rem;
   }
 }
+
+.back-icon {
+  font-size: 36px;
+}
+
+.modal-content {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.employee-container {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.add-icon {
+  font-size: 36px;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+}

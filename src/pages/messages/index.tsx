@@ -12,23 +12,56 @@ import {
   IonBadge,
   IonFabButton,
   IonFab,
+  IonModal,
+  IonButton,
 } from "@ionic/react";
-import { chatboxEllipsesOutline, searchSharp } from "ionicons/icons";
+import {
+  addCircleOutline,
+  chatboxEllipsesOutline,
+  chevronBackCircle,
+  pulseOutline,
+  searchSharp,
+} from "ionicons/icons";
 
 import "./MessagesTab.css";
 import getAllChats from "../../services/chats/get-all-chats.service";
 import { Chat } from "../../types";
 import store from "../../store";
+import { useHistory } from "react-router";
+import getAllEmployees from "../../services/users/get-all-employees.service";
 
 const MessageTab: React.FC = () => {
   const user = store.getState().auth.user;
   const [chats, setChats] = useState<Chat[]>([]);
+  const [employees, setEmployees] = useState<any>([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const history = useHistory();
+  const handleClick = () => {
+    history.push("/messages");
+  };
 
   const fetchAllChats = useCallback(async () => {
     try {
       const response = await getAllChats();
       setChats(response);
-      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const fetchAllEmployees = useCallback(async () => {
+    try {
+      const response = await getAllEmployees();
+      setEmployees(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  const createChat = useCallback(async (userId: number) => {
+    try {
+      await createChat(userId);
+      history.push("/messages");
     } catch (error) {
       console.log(error);
     }
@@ -37,6 +70,11 @@ const MessageTab: React.FC = () => {
   useEffect(() => {
     fetchAllChats();
   }, [fetchAllChats]);
+
+  useEffect(() => {
+    fetchAllEmployees();
+  }, [fetchAllEmployees]);
+
   return (
     <IonPage>
       <IonHeader class="ion-no-border">
@@ -97,10 +135,50 @@ const MessageTab: React.FC = () => {
         </div>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton className="ion-fab-button">
-            <IonIcon icon={chatboxEllipsesOutline}></IonIcon>
+            <IonIcon
+              onClick={() => setOpen(true)}
+              icon={chatboxEllipsesOutline}
+            ></IonIcon>
           </IonFabButton>
         </IonFab>
       </IonContent>
+      <IonModal isOpen={open}>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Iniciar una conversación</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <div className="modal-content">
+            <IonIcon
+              icon={chevronBackCircle}
+              className="back-icon"
+              onClick={() => setOpen(false)}
+            ></IonIcon>
+            {employees.map((employee: any) => {
+              return (
+                <IonItem>
+                  <div className="item-container">
+                    <div className="employee-container">
+                      <h3 className="employee-name">
+                        {employee.user.name} {employee.user.lastname}
+                      </h3>
+                      <h4>Rol: {employee.user.role}</h4>
+                    </div>
+                    <IonIcon
+                      className="add-icon"
+                      icon={addCircleOutline}
+                      onClick={() => {
+                        setOpen(false);
+                      }}
+                    ></IonIcon>
+                  </div>
+                </IonItem>
+              );
+            })}
+          </div>
+        </IonContent>
+      </IonModal>
     </IonPage>
   );
 };

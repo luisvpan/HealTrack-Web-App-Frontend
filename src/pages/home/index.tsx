@@ -11,8 +11,6 @@ import "./HomeTab.css";
 import store from "../../store";
 
 const HomeTab: React.FC = () => {
-  console.log(store.getState());
-
   const user = store.getState().auth.user;
   return (
     <IonPage>

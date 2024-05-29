@@ -39,7 +39,7 @@ const ReportTab: React.FC = () => {
 
   const onReportSubmit = useSubmitReport();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const file = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -113,17 +113,14 @@ const ReportTab: React.FC = () => {
             <IonLabel>Seleccione una foto dandole click al botón</IonLabel>
             <div className="camera-button">
               <IonIcon icon={cameraOutline} className="camera-icon"></IonIcon>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-              />
+              <input type="file" ref={file} onChange={handleFileUpload} />
             </div>
             <div className="buttons-container">
               <IonButton onClick={() => setOpen(false)}>Cerrar</IonButton>
               <IonButton
                 onClick={() => {
                   setOpen(false);
+                  onReportSubmit(answers);
                 }}
               >
                 Enviar
