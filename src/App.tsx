@@ -53,11 +53,13 @@ import store from "./store";
 setupIonicReact();
 
 const App: React.FC = () => {
+  const token = store.getState().auth.token;
+  const role = store.getState().auth.user?.role;
   return (
     <Provider store={store}>
       <IonApp>
         <IonReactRouter>
-          <AppContent />
+          {token ? <AppContent /> : <Redirect to="/login" />}
           <ToastContainer />
         </IonReactRouter>
       </IonApp>
@@ -67,6 +69,7 @@ const App: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const role = store.getState().auth.user?.role;
 
   return (
     <IonTabs>
@@ -100,10 +103,12 @@ const AppContent: React.FC = () => {
           <IonIcon aria-hidden="true" icon={chatbubbles} />
           <IonLabel>Mensajes</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="report" href="/report">
-          <IonIcon aria-hidden="true" icon={alarm} />
-          <IonLabel>Reporte</IonLabel>
-        </IonTabButton>
+        {role !== "patient" ? null : (
+          <IonTabButton tab="report" href="/report">
+            <IonIcon aria-hidden="true" icon={alarm} />
+            <IonLabel>Reporte</IonLabel>
+          </IonTabButton>
+        )}
       </IonTabBar>
     </IonTabs>
   );

@@ -133,14 +133,16 @@ const MessageTab: React.FC = () => {
             ))}
           </div>
         </div>
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton className="ion-fab-button">
-            <IonIcon
-              onClick={() => setOpen(true)}
-              icon={chatboxEllipsesOutline}
-            ></IonIcon>
-          </IonFabButton>
-        </IonFab>
+        {user?.role !== "patient" ? (
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton className="ion-fab-button">
+              <IonIcon
+                onClick={() => setOpen(true)}
+                icon={chatboxEllipsesOutline}
+              ></IonIcon>
+            </IonFabButton>
+          </IonFab>
+        ) : null}
       </IonContent>
       <IonModal isOpen={open}>
         <IonHeader>
