@@ -87,9 +87,6 @@ const AppContent: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route exact path="/login">
-          <Login />
-        </Route>
         <Route exact path="/home">
           <HomeTab />
         </Route>
