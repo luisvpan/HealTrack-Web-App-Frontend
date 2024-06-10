@@ -60,7 +60,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <IonApp>
         <IonReactRouter>
-          {token ? <AppContent /> : <LoginContent />}
+          <AppContent />
           <ToastContainer />
         </IonReactRouter>
       </IonApp>
