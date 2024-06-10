@@ -54,16 +54,29 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const token = store.getState().auth.token;
-  const role = store.getState().auth.user?.role;
+  console.log(token);
+
   return (
     <Provider store={store}>
       <IonApp>
         <IonReactRouter>
-          {token ? <AppContent /> : <Redirect to="/login" />}
+          {token ? <AppContent /> : <LoginContent />}
           <ToastContainer />
         </IonReactRouter>
       </IonApp>
     </Provider>
+  );
+};
+
+const LoginContent: React.FC = () => {
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+      </IonRouterOutlet>
+    </IonTabs>
   );
 };
 
