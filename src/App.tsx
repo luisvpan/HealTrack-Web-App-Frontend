@@ -1,4 +1,4 @@
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Redirect, Route, useHistory, useLocation } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -54,7 +54,6 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const token = store.getState().auth.token;
-  console.log(token);
 
   return (
     <Provider store={store}>
@@ -70,13 +69,11 @@ const App: React.FC = () => {
 
 const LoginContent: React.FC = () => {
   return (
-    <IonTabs>
-      <IonRouterOutlet>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-      </IonRouterOutlet>
-    </IonTabs>
+    <IonRouterOutlet>
+      <Route exact path="/login">
+        <Login />
+      </Route>
+    </IonRouterOutlet>
   );
 };
 
