@@ -29,7 +29,7 @@ import {
   useState,
 } from "react";
 import getMessagesById from "../../services/messages/get-messages-by-id.service";
-import { ChatInfo, Message } from "../../types";
+import { AllRoles, ChatInfo, Message, TranslatedRole } from "../../types";
 import sendMessage from "../../services/messages/create-message.service";
 import useSubmitImage from "./use-submit-image";
 
@@ -158,12 +158,16 @@ const Conversation: React.FC = () => {
                 {chatInfo.created_by.id === user!.id ? (
                   <h1>
                     {chatInfo.users[0].name} {chatInfo.users[0].lastname}{" "}
-                    <span className="role">({chatInfo.users[0].role})</span>
+                    <span className="role">
+                      ({TranslatedRole[chatInfo.users[0].role as AllRoles]})
+                    </span>
                   </h1>
                 ) : (
                   <h1>
                     {chatInfo.created_by.name} {chatInfo.created_by.lastname}{" "}
-                    <span className="role">({chatInfo.created_by.role})</span>
+                    <span className="role">
+                      ({TranslatedRole[chatInfo.created_by.role as AllRoles]})
+                    </span>
                   </h1>
                 )}
                 {
