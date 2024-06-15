@@ -34,6 +34,7 @@ export interface Message {
   createdAt: string;
   updatedAt: string;
   user: User;
+  attachment: string;
 }
 
 export interface MessagesData {

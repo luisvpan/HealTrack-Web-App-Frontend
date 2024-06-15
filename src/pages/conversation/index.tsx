@@ -36,7 +36,7 @@ import useSubmitImage from "./use-submit-image";
 const Conversation: React.FC = () => {
   const history = useHistory();
 
-  const [other, setOther] = useState<number>(0);
+  //  const [other, setOther] = useState<number>(0);
 
   const { otherId } = useParams<{ otherId: string }>();
 
@@ -72,11 +72,12 @@ const Conversation: React.FC = () => {
       setMessages(response.data.items);
       setChatInfo(response.data.chat);
 
+      /*
       if (response.data.chat.created_by.id == user?.id) {
         setOther(response.data.chat.users[0].id);
       } else {
         setOther(response.data.chat.created_by.id);
-      }
+      } */
     } catch (error) {
       console.log(error);
     }
@@ -106,7 +107,6 @@ const Conversation: React.FC = () => {
       console.log("Socket connected");
     });
     socket.current!.on("send_message", (newMessage: any) => {
-      console.log("newMessage", newMessage);
       const adaptedMessage = {
         id: newMessage.message.id,
         message: newMessage.message.message.message,
@@ -114,9 +114,8 @@ const Conversation: React.FC = () => {
         createdAt: newMessage.message.createdAt,
         updatedAt: newMessage.message.updatedAt,
         user: newMessage.user,
-        attachment: newMessage.attachment,
+        attachment: newMessage.message.attachment,
       };
-      console.log(adaptedMessage);
 
       setMessages((prevMessages) => {
         if (!prevMessages.some((message) => message.id === adaptedMessage.id)) {
