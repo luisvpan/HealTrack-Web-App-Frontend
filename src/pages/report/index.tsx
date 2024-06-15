@@ -18,22 +18,46 @@ import "./ReportTab.css";
 import { cameraOutline } from "ionicons/icons";
 import useSubmitReport from "./use-submit-report";
 
-const reportQuestions = [
-  "Tiene temperatura mayor de 38,5 °C",
-  "Tiene enrojecimiento alrededor de la herida operatoria",
-  "Tiene hinchazón en la herida operatoria",
-  "Presenta secreciones que salen a través de la herida operatoria",
+export interface QuestionValues {
+  hasHighTemperature: boolean;
+  hasRedness: boolean;
+  hasSwelling: boolean;
+  hasSecretions: boolean;
+}
+interface ReportQuestion {
+  label: string;
+  key: keyof QuestionValues;
+}
+
+const reportQuestions: ReportQuestion[] = [
+  { label: "Tiene temperatura mayor de 38,5 °C", key: "hasHighTemperature" },
+  {
+    label: "Tiene enrojecimiento alrededor de la herida operatoria",
+    key: "hasRedness",
+  },
+  { label: "Tiene hinchazón en la herida operatoria", key: "hasSwelling" },
+  {
+    label: "Presenta secreciones que salen a través de la herida operatoria",
+    key: "hasSecretions",
+  },
 ];
+
+const initialValues = {
+  hasHighTemperature: false,
+  hasRedness: false,
+  hasSwelling: false,
+  hasSecretions: false,
+};
 
 const ReportTab: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [answers, setAnswers] = useState(
-    Array(reportQuestions.length).fill(null)
-  );
+  const [answers, setAnswers] = useState(initialValues);
+  const [fileData, setFileData] = useState<any>(null);
 
-  const handleAnswerChange = (index: number, answer: boolean) => {
-    const newAnswers = [...answers];
+  const handleAnswerChange = (index: keyof QuestionValues, answer: boolean) => {
+    const newAnswers = { ...answers };
     newAnswers[index] = answer;
+
     setAnswers(newAnswers);
   };
 
@@ -45,6 +69,7 @@ const ReportTab: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       console.log(file);
+      setFileData(file);
     }
   };
 
@@ -59,32 +84,34 @@ const ReportTab: React.FC = () => {
         <form className="daily-report">
           <IonList>
             <div className="question-list">
-              {reportQuestions.map((question: string, index: number) => (
-                <div className="question">
-                  <p>{question}</p>
-                  <IonRadioGroup
-                    onIonChange={(e) =>
-                      handleAnswerChange(index, e.detail.value)
-                    }
-                  >
-                    <div className="answers-container">
-                      <div className="radius-container">
-                        <p>Sí</p>
-                        <IonRadio value={true}></IonRadio>
+              {reportQuestions.map(
+                (question: ReportQuestion, index: number) => (
+                  <div className="question" key={index}>
+                    <p>{question.label}</p>
+                    <IonRadioGroup
+                      onIonChange={(e) =>
+                        handleAnswerChange(question.key, e.detail.value)
+                      }
+                    >
+                      <div className="answers-container">
+                        <div className="radius-container">
+                          <p>Sí</p>
+                          <IonRadio value={true}></IonRadio>
+                        </div>
+                        <div className="radius-container">
+                          <p>No</p>
+                          <IonRadio value={false}></IonRadio>
+                        </div>
                       </div>
-                      <div className="radius-container">
-                        <p>No</p>
-                        <IonRadio value={false}></IonRadio>
-                      </div>
-                    </div>
-                  </IonRadioGroup>
-                </div>
-              ))}
+                    </IonRadioGroup>
+                  </div>
+                )
+              )}
             </div>
             <div className="button-section">
               <IonButton
                 onClick={() => {
-                  if (answers.filter((answer) => answer === true).length > 1) {
+                  if (Object.values(answers).filter(Boolean).length >= 2) {
                     setOpen(true);
                   } else {
                     onReportSubmit(answers);
@@ -113,14 +140,20 @@ const ReportTab: React.FC = () => {
             <IonLabel>Seleccione una foto dandole click al botón</IonLabel>
             <div className="camera-button">
               <IonIcon icon={cameraOutline} className="camera-icon"></IonIcon>
-              <input type="file" ref={file} onChange={handleFileUpload} />
+              <input
+                type="file"
+                ref={file}
+                onChange={handleFileUpload}
+                accept="image/*"
+              />
             </div>
             <div className="buttons-container">
               <IonButton onClick={() => setOpen(false)}>Cerrar</IonButton>
               <IonButton
                 onClick={() => {
                   setOpen(false);
-                  onReportSubmit(answers);
+                  onReportSubmit(answers, fileData);
+                  setAnswers(initialValues);
                 }}
               >
                 Enviar

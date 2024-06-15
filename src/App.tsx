@@ -53,8 +53,6 @@ import store from "./store";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const token = store.getState().auth.token;
-
   return (
     <Provider store={store}>
       <IonApp>
@@ -67,38 +65,38 @@ const App: React.FC = () => {
   );
 };
 
-const LoginContent: React.FC = () => {
-  return (
-    <IonRouterOutlet>
-      <Route exact path="/login">
-        <Login />
-      </Route>
-    </IonRouterOutlet>
-  );
-};
-
 const AppContent: React.FC = () => {
   const location = useLocation();
+  const token = store.getState().auth.token;
   const role = store.getState().auth.user?.role;
 
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Route exact path="/home">
-          <HomeTab />
+        <Route exact path="/login">
+          <Login />
         </Route>
-        <Route exact path="/messages">
-          <MessagesTab />
-        </Route>
-        <Route path="/conversation/:otherId">
-          <Conversation />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/tab1" />
-        </Route>
-        <Route exact path="/report">
-          <ReportTab />
-        </Route>
+        {!token ? (
+          <Redirect to="/login" />
+        ) : (
+          <>
+            <Route exact path="/home">
+              <HomeTab />
+            </Route>
+            <Route exact path="/messages">
+              <MessagesTab />
+            </Route>
+            <Route path="/conversation/:otherId">
+              <Conversation />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/tab1" />
+            </Route>
+            <Route exact path="/report">
+              <ReportTab />
+            </Route>
+          </>
+        )}
       </IonRouterOutlet>
 
       <IonTabBar slot={location.pathname !== "/login" ? "bottom" : undefined}>

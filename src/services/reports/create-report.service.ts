@@ -7,7 +7,7 @@ import BackendError from "../../exceptions/backend-error";
 const URL = `${API_BASE_URL}/reports`;
 
 export default async function createReport(
-  body: CreateReportBody
+  body: FormData
 ): Promise<any> {
   try {
     const response = await axios.post(`${URL}`, body, {
