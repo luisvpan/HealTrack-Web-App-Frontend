@@ -1,23 +1,27 @@
 import { useCallback } from "react";
-import createReport from "../../services/reports/create-report.service";
 import store from "../../store";
-import useSuccessToast from "../../components/SuccessToast";
+import { QuestionValues } from ".";
 import { useHistory } from "react-router";
+import jsonToFormData from "../../utils/json-to-formData";
+import useSuccessToast from "../../components/SuccessToast";
+import createReport from "../../services/reports/create-report.service";
 
 const useSubmitReport = () => {
   const role = store.getState().auth.user?.role;
   const successToast = useSuccessToast();
   const history = useHistory();
-  const onSubmit = useCallback(async (report: any, file?: File) => {
+  const onSubmit = useCallback(async (report: QuestionValues, file?: File) => {
     try {
       const body = {
-        hasHighTemperature: report[0],
-        hasRedness: report[1],
-        hasSwelling: report[2],
-        hasSecretions: report[3],
-        isRespondingForEmployee: role === "patient" ? true : false,
+        hasHighTemperature: report.hasHighTemperature,
+        hasRedness: report.hasRedness,
+        hasSwelling: report.hasSwelling,
+        hasSecretions: report.hasSecretions,
+        ...(!!file ? { file: file } : {}),
       };
-      await createReport(body);
+
+      const dataToSend = jsonToFormData(body);
+      await createReport(dataToSend);
       successToast("Reporte creado con éxito");
       history.push("/messages");
     } catch (error) {
