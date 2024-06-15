@@ -5,10 +5,18 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
+  IonLabel,
+  IonModal,
   IonPage,
+  IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { chevronBackCircle, sendSharp } from "ionicons/icons";
+import {
+  cameraOutline,
+  cameraSharp,
+  chevronBackCircle,
+  sendSharp,
+} from "ionicons/icons";
 import "./Conversation.css";
 import { useHistory, useParams } from "react-router";
 import { Socket, io } from "socket.io-client";
@@ -23,11 +31,15 @@ import {
 import getMessagesById from "../../services/messages/get-messages-by-id.service";
 import { ChatInfo, Message } from "../../types";
 import sendMessage from "../../services/messages/create-message.service";
+import useSubmitImage from "./use-submit-image";
 
 const Conversation: React.FC = () => {
   const history = useHistory();
 
+  const [other, setOther] = useState<number>(0);
+
   const { otherId } = useParams<{ otherId: string }>();
+
   const handleClick = () => {
     history.push("/messages");
   };
@@ -52,12 +64,19 @@ const Conversation: React.FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [chatInfo, setChatInfo] = useState<ChatInfo | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
 
   const getAllMessages = useCallback(async () => {
     try {
       const response = await getMessagesById(Number(otherId));
       setMessages(response.data.items);
       setChatInfo(response.data.chat);
+
+      if (response.data.chat.created_by.id == user?.id) {
+        setOther(response.data.chat.users[0].id);
+      } else {
+        setOther(response.data.chat.created_by.id);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +103,7 @@ const Conversation: React.FC = () => {
       console.log("Socket connected");
     });
     socket.current!.on("send_message", (newMessage: any) => {
+      console.log("newMessage", newMessage);
       const adaptedMessage = {
         id: newMessage.message.id,
         message: newMessage.message.message.message,
@@ -91,7 +111,9 @@ const Conversation: React.FC = () => {
         createdAt: newMessage.message.createdAt,
         updatedAt: newMessage.message.updatedAt,
         user: newMessage.user,
+        attachment: newMessage.attachment,
       };
+      console.log(adaptedMessage);
 
       setMessages((prevMessages) => {
         if (!prevMessages.some((message) => message.id === adaptedMessage.id)) {
@@ -102,6 +124,20 @@ const Conversation: React.FC = () => {
       });
     });
   }, []);
+
+  const [fileData, setFileData] = useState<any>(null);
+
+  const file = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log(file);
+      setFileData(file);
+    }
+  };
+
+  const onImageSubmit = useSubmitImage(user, socket.current!);
 
   return (
     <IonPage>
@@ -147,7 +183,15 @@ const Conversation: React.FC = () => {
                     <>
                       {message.user.id !== userId ? (
                         <div className="other messages" key={message.id}>
-                          <div className="message other">{message.message}</div>
+                          <div className="message other">
+                            {message.attachment !== null ? (
+                              <div>
+                                <img src={message.attachment} />
+                              </div>
+                            ) : (
+                              <div> {message.message} </div>
+                            )}
+                          </div>
                           <span>
                             {today.toDateString() ===
                             new Date(message.createdAt).toDateString()
@@ -169,7 +213,15 @@ const Conversation: React.FC = () => {
                         </div>
                       ) : (
                         <div className="mine messages" key={message.id}>
-                          <div className="message mine">{message.message}</div>
+                          <div className="message mine">
+                            {message.attachment !== null ? (
+                              <div>
+                                <img src={message.attachment} />
+                              </div>
+                            ) : (
+                              <div> {message.message} </div>
+                            )}
+                          </div>
                           <span>
                             {today.toDateString() ===
                             new Date(message.createdAt).toDateString()
@@ -200,6 +252,11 @@ const Conversation: React.FC = () => {
               name="message"
             ></IonInput>
             <div className="send-button">
+              <IonButton onClick={() => setOpen(true)}>
+                <IonIcon icon={cameraSharp}></IonIcon>
+              </IonButton>
+            </div>
+            <div className="send-button">
               <IonButton type="submit">
                 <IonIcon icon={sendSharp}></IonIcon>
               </IonButton>
@@ -207,6 +264,40 @@ const Conversation: React.FC = () => {
           </div>
         </form>
       </IonContent>
+
+      <IonModal isOpen={open}>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Enviar foto</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <div className="modal-content">
+            <IonLabel>Seleccione una foto dandole click al botón</IonLabel>
+            <div className="camera-button">
+              <IonIcon icon={cameraOutline} className="camera-icon"></IonIcon>
+              <input
+                type="file"
+                ref={file}
+                onChange={handleFileUpload}
+                accept="image/*"
+              />
+            </div>
+            <div className="buttons-container">
+              <IonButton onClick={() => setOpen(false)}>Cerrar</IonButton>
+              <IonButton
+                onClick={() => {
+                  setOpen(false);
+                  onImageSubmit(fileData, Number(otherId));
+                  setFileData(null);
+                }}
+              >
+                Enviar
+              </IonButton>
+            </div>
+          </div>
+        </IonContent>
+      </IonModal>
     </IonPage>
   );
 };
