@@ -4,6 +4,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInput,
   IonLabel,
   IonList,
   IonModal,
@@ -53,7 +54,7 @@ const ReportTab: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [answers, setAnswers] = useState(initialValues);
   const [fileData, setFileData] = useState<any>(null);
-
+  const [description, setDescription] = useState<string>("");
   const handleAnswerChange = (index: keyof QuestionValues, answer: boolean) => {
     const newAnswers = { ...answers };
     newAnswers[index] = answer;
@@ -107,14 +108,23 @@ const ReportTab: React.FC = () => {
                   </div>
                 )
               )}
+              <IonLabel>Descripción (opcional):</IonLabel>
+              <IonInput
+                name="description"
+                placeholder="Descripción"
+                onIonChange={(event) => {
+                  setDescription(event.target.value as string);
+                  console.log(event.target.value);
+                }}
+              />
             </div>
             <div className="button-section">
               <IonButton
-                onClick={() => {
+                onClick={(e) => {
                   if (Object.values(answers).filter(Boolean).length >= 2) {
                     setOpen(true);
                   } else {
-                    onReportSubmit(answers);
+                    onReportSubmit(description, answers);
                   }
                 }}
               >
@@ -150,9 +160,9 @@ const ReportTab: React.FC = () => {
             <div className="buttons-container">
               <IonButton onClick={() => setOpen(false)}>Cerrar</IonButton>
               <IonButton
-                onClick={() => {
+                onClick={(e) => {
                   setOpen(false);
-                  onReportSubmit(answers, fileData);
+                  onReportSubmit(description, answers, fileData);
                   setAnswers(initialValues);
                 }}
               >
