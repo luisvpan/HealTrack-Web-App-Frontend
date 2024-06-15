@@ -92,7 +92,10 @@ const Conversation: React.FC = () => {
       const form = event.target as HTMLFormElement;
       const message = form.elements.namedItem("message") as HTMLInputElement;
       await sendMessage(message.value, Number(otherId));
-      socket.current!.emit("send_message", { user, message: message.value });
+      socket.current!.emit("send_message", {
+        user,
+        message: { message: message.value },
+      });
     } catch (error) {
       console.log(error);
     }

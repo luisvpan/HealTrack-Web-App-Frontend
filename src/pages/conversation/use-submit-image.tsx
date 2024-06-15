@@ -16,12 +16,12 @@ const useSubmitImage = (
   const errorToast = useErrorToast();
   const successToast = useSuccessToast();
 
-  const onSubmitImage = async (file: any, otherId: number) => {
+  const onSubmitImage = async (file: File, otherId: number) => {
     try {
       await sendImage(file, otherId);
       socket.emit("send_message", {
         user,
-        message: { message: "", attachment: file },
+        message: { message: "", attachment: file, filename: file.name },
       });
     } catch (error) {
       console.log(error);
