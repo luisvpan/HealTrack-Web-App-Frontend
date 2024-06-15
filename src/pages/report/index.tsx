@@ -69,7 +69,6 @@ const ReportTab: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log(file);
       setFileData(file);
     }
   };
@@ -114,7 +113,6 @@ const ReportTab: React.FC = () => {
                 placeholder="Descripción"
                 onIonChange={(event) => {
                   setDescription(event.target.value as string);
-                  console.log(event.target.value);
                 }}
               />
             </div>

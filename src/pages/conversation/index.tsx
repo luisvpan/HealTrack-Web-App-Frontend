@@ -109,7 +109,7 @@ const Conversation: React.FC = () => {
     socket.current!.on("send_message", (newMessage: any) => {
       const adaptedMessage = {
         id: newMessage.message.id,
-        message: newMessage.message.message.message,
+        message: newMessage.message.message,
         was_edited: newMessage.message.was_edited,
         createdAt: newMessage.message.createdAt,
         updatedAt: newMessage.message.updatedAt,
@@ -134,7 +134,6 @@ const Conversation: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log(file);
       setFileData(file);
     }
   };
@@ -216,13 +215,12 @@ const Conversation: React.FC = () => {
                       ) : (
                         <div className="mine messages" key={message.id}>
                           <div className="message mine">
-                            {message.attachment !== null ? (
+                            {message.attachment && (
                               <div>
                                 <img src={message.attachment} />
                               </div>
-                            ) : (
-                              <div> {message.message} </div>
                             )}
+                            <div> {message.message} </div>
                           </div>
                           <span>
                             {today.toDateString() ===

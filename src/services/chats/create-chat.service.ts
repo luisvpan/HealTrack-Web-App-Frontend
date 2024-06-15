@@ -6,14 +6,17 @@ import BackendError from "../../exceptions/backend-error";
 
 const URL = `${API_BASE_URL}/chats`;
 
-export default async function createMessage(userId: number): Promise<any> {
+export default async function postChat(userId: number): Promise<any> {
   try {
     const response = await axios.post(
       `${URL}`,
       {
-        users: {
-          id: userId,
-        },
+        users: [
+          {
+            id: userId,
+          },
+        ],
+        title: "chat",
       },
       {
         headers: {
