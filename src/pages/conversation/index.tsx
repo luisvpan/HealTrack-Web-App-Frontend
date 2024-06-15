@@ -29,7 +29,7 @@ import {
   useState,
 } from "react";
 import getMessagesById from "../../services/messages/get-messages-by-id.service";
-import { ChatInfo, Message } from "../../types";
+import { AllRoles, ChatInfo, Message, TranslatedRole } from "../../types";
 import sendMessage from "../../services/messages/create-message.service";
 import useSubmitImage from "./use-submit-image";
 
@@ -109,7 +109,7 @@ const Conversation: React.FC = () => {
     socket.current!.on("send_message", (newMessage: any) => {
       const adaptedMessage = {
         id: newMessage.message.id,
-        message: newMessage.message.message.message,
+        message: newMessage.message.message,
         was_edited: newMessage.message.was_edited,
         createdAt: newMessage.message.createdAt,
         updatedAt: newMessage.message.updatedAt,
@@ -134,7 +134,6 @@ const Conversation: React.FC = () => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log(file);
       setFileData(file);
     }
   };
@@ -159,12 +158,16 @@ const Conversation: React.FC = () => {
                 {chatInfo.created_by.id === user!.id ? (
                   <h1>
                     {chatInfo.users[0].name} {chatInfo.users[0].lastname}{" "}
-                    <span className="role">({chatInfo.users[0].role})</span>
+                    <span className="role">
+                      ({TranslatedRole[chatInfo.users[0].role as AllRoles]})
+                    </span>
                   </h1>
                 ) : (
                   <h1>
                     {chatInfo.created_by.name} {chatInfo.created_by.lastname}{" "}
-                    <span className="role">({chatInfo.created_by.role})</span>
+                    <span className="role">
+                      ({TranslatedRole[chatInfo.created_by.role as AllRoles]})
+                    </span>
                   </h1>
                 )}
                 {
@@ -216,13 +219,12 @@ const Conversation: React.FC = () => {
                       ) : (
                         <div className="mine messages" key={message.id}>
                           <div className="message mine">
-                            {message.attachment !== null ? (
+                            {message.attachment && (
                               <div>
                                 <img src={message.attachment} />
                               </div>
-                            ) : (
-                              <div> {message.message} </div>
                             )}
+                            <div> {message.message} </div>
                           </div>
                           <span>
                             {today.toDateString() ===

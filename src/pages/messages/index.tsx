@@ -19,7 +19,6 @@ import {
   addCircleOutline,
   chatboxEllipsesOutline,
   chevronBackCircle,
-  pulseOutline,
   searchSharp,
 } from "ionicons/icons";
 
@@ -29,6 +28,7 @@ import { Chat } from "../../types";
 import store from "../../store";
 import { useHistory } from "react-router";
 import getAllEmployees from "../../services/users/get-all-employees.service";
+import postChat from "../../services/chats/create-chat.service";
 
 const MessageTab: React.FC = () => {
   const user = store.getState().auth.user;
@@ -36,9 +36,6 @@ const MessageTab: React.FC = () => {
   const [employees, setEmployees] = useState<any>([]);
   const [open, setOpen] = useState<boolean>(false);
   const history = useHistory();
-  const handleClick = () => {
-    history.push("/messages");
-  };
 
   const fetchAllChats = useCallback(async () => {
     try {
@@ -58,15 +55,6 @@ const MessageTab: React.FC = () => {
     }
   }, []);
 
-  const createChat = useCallback(async (userId: number) => {
-    try {
-      await createChat(userId);
-      history.push("/messages");
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
   useEffect(() => {
     fetchAllChats();
   }, [fetchAllChats]);
@@ -74,6 +62,15 @@ const MessageTab: React.FC = () => {
   useEffect(() => {
     fetchAllEmployees();
   }, [fetchAllEmployees]);
+
+  const createChat = useCallback(async (userId: number) => {
+    try {
+      await postChat(userId);
+      fetchAllChats();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <IonPage>
@@ -90,11 +87,12 @@ const MessageTab: React.FC = () => {
           </div>
 
           <div className="chats">
-            {chats.map((chat, index) => (
+            {chats.map((chat) => (
               <IonItem
                 routerLink={`/conversation/${chat.id}`}
                 lines="none"
                 detail={false}
+                key={chat.id}
               >
                 <IonAvatar slot="start">
                   <img src="https://i.pravatar.cc/300" />
@@ -102,7 +100,7 @@ const MessageTab: React.FC = () => {
                 <IonLabel className="ion-text-nowrap">
                   {chat.created_by.id === user!.id ? (
                     <h2>
-                      {chat.users[index].name} {chat.users[index].lastname}
+                      {chat.users[0].name} {chat.users[0].lastname}
                     </h2>
                   ) : (
                     <h2>
@@ -110,7 +108,11 @@ const MessageTab: React.FC = () => {
                     </h2>
                   )}
 
-                  <p>{chat.last_message.message}</p>
+                  {chat.last_message === null ? (
+                    <p>Escribe el primer mensaje!</p>
+                  ) : (
+                    <p>{chat.last_message.message}</p>
+                  )}
                 </IonLabel>
                 <div className="info-container">
                   {chat.unread_messages_count > 0 && (
@@ -118,16 +120,18 @@ const MessageTab: React.FC = () => {
                       {chat.unread_messages_count}
                     </IonBadge>
                   )}
-                  <p>
-                    {new Date(chat.last_message.updatedAt).toLocaleDateString(
-                      "es-ES",
-                      {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      }
-                    )}
-                  </p>
+                  {chat.last_message && (
+                    <p>
+                      {new Date(chat.last_message.updatedAt).toLocaleDateString(
+                        "es-ES",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                  )}
                 </div>
               </IonItem>
             ))}
@@ -159,7 +163,7 @@ const MessageTab: React.FC = () => {
             ></IonIcon>
             {employees.map((employee: any) => {
               return (
-                <IonItem>
+                <IonItem key={employee.user.id}>
                   <div className="item-container">
                     <div className="employee-container">
                       <h3 className="employee-name">
@@ -167,13 +171,17 @@ const MessageTab: React.FC = () => {
                       </h3>
                       <h4>Rol: {employee.user.role}</h4>
                     </div>
-                    <IonIcon
-                      className="add-icon"
-                      icon={addCircleOutline}
+                    <IonButton
                       onClick={() => {
+                        createChat(employee.user.id);
                         setOpen(false);
                       }}
-                    ></IonIcon>
+                    >
+                      <IonIcon
+                        className="add-icon"
+                        icon={addCircleOutline}
+                      ></IonIcon>
+                    </IonButton>
                   </div>
                 </IonItem>
               );

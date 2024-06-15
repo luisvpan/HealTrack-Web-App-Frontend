@@ -10,6 +10,20 @@ export interface User {
   deletedAt: string | null;
 }
 
+export enum AllRoles {
+  ADMIN = "admin",
+  SPECIALIST = "specialist",
+  ASSISTANT = "assistant",
+  PATIENT = "patient",
+}
+
+export enum TranslatedRole {
+  admin = "Administrador",
+  specialist = "Especialista",
+  assistant = "Enfermero",
+  patient = "Paciente",
+}
+
 export interface Chat {
   id: number;
   title: string;

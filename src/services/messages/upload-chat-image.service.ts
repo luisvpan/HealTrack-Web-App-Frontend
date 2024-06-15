@@ -14,9 +14,6 @@ export default async function sendImage(
     const formData = new FormData();
     formData.append("file", body);
     formData.append("message", "");
-    console.log("Valor del dato: " + formData.get("message"));
-    console.log("Valor del dato: " + formData.get("file"));
-    console.log(body);
     const response = await axios.post(`${URL}/${otherId}/messages/`, formData, {
       headers: {
         Authorization: `Bearer ${store.getState().auth.token}`,
