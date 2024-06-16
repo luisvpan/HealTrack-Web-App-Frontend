@@ -188,10 +188,13 @@ const Conversation: React.FC = () => {
                     <>
                       {message.user.id !== userId ? (
                         <div className="other messages" key={message.id}>
-                          <div className="message other">
+                          <div className="message other" key={message.id}>
                             {message.attachment !== null ? (
                               <div>
-                                <img src={message.attachment} />
+                                <img
+                                  className="image"
+                                  src={message.attachment}
+                                />
                               </div>
                             ) : (
                               <div> {message.message} </div>
@@ -218,10 +221,13 @@ const Conversation: React.FC = () => {
                         </div>
                       ) : (
                         <div className="mine messages" key={message.id}>
-                          <div className="message mine">
+                          <div className="message mine" key={message.id}>
                             {message.attachment && (
-                              <div>
-                                <img src={message.attachment} />
+                              <div key={message.id}>
+                                <img
+                                  className="image"
+                                  src={message.attachment}
+                                />
                               </div>
                             )}
                             <div> {message.message} </div>

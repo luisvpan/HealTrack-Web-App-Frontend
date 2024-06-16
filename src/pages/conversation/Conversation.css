@@ -72,6 +72,10 @@
     margin-bottom: 6px;
     background-color: #262626;
   }
+  .image {
+    max-width: 250px;
+    max-height: 250px;
+  }
 }
 
 .mine {
@@ -90,6 +94,11 @@
   .message {
     margin-bottom: 6px;
     background-color: #0084ff;
+  }
+
+  .image {
+    max-width: 250px;
+    max-height: 250px;
   }
 }
 

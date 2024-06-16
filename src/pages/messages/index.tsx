@@ -24,7 +24,7 @@ import {
 
 import "./MessagesTab.css";
 import getAllChats from "../../services/chats/get-all-chats.service";
-import { Chat } from "../../types";
+import { AllRoles, Chat, TranslatedRole } from "../../types";
 import store from "../../store";
 import { useHistory } from "react-router";
 import getAllEmployees from "../../services/users/get-all-employees.service";
@@ -169,7 +169,10 @@ const MessageTab: React.FC = () => {
                       <h3 className="employee-name">
                         {employee.user.name} {employee.user.lastname}
                       </h3>
-                      <h4>Rol: {employee.user.role}</h4>
+
+                      <h4>
+                        Rol: {TranslatedRole[employee.user.role as AllRoles]}
+                      </h4>
                     </div>
                     <IonButton
                       onClick={() => {
