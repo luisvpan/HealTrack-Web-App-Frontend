@@ -2,6 +2,7 @@ import {
   IonAvatar,
   IonButton,
   IonContent,
+  IonFab,
   IonHeader,
   IonIcon,
   IonInput,
@@ -97,6 +98,8 @@ const Conversation: React.FC = () => {
         user,
         message: { message: message.value },
       });
+
+      message.value = "";
     } catch (error) {
       console.log(error);
     }
@@ -256,6 +259,7 @@ const Conversation: React.FC = () => {
                   ))}
             </div>
           </div>
+
           <div className="message-input">
             <IonInput
               placeholder="Escribe tu mensaje"
