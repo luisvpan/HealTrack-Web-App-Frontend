@@ -10,25 +10,19 @@ import {
   IonIcon,
   IonAvatar,
   IonBadge,
-  IonFabButton,
-  IonFab,
-  IonModal,
-  IonButton,
 } from "@ionic/react";
-import {
-  addCircleOutline,
-  chatboxEllipsesOutline,
-  chevronBackCircle,
-  searchSharp,
-} from "ionicons/icons";
+import { searchSharp } from "ionicons/icons";
 
 import "./MessagesTab.css";
 import getAllChats from "../../services/chats/get-all-chats.service";
-import { AllRoles, Chat, TranslatedRole } from "../../types";
+import {
+  //AllRoles,
+  Chat, //, TranslatedRole
+} from "../../types";
 import store from "../../store";
-import { useHistory } from "react-router";
-import getAllEmployees from "../../services/users/get-all-employees.service";
-import postChat from "../../services/chats/create-chat.service";
+
+//import getAllEmployees from "../../services/users/get-all-employees.service";
+//import postChat from "../../services/chats/create-chat.service";
 
 const MessageTab: React.FC = () => {
   const user = store.getState().auth.user;
