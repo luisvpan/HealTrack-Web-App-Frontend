@@ -33,9 +33,8 @@ import postChat from "../../services/chats/create-chat.service";
 const MessageTab: React.FC = () => {
   const user = store.getState().auth.user;
   const [chats, setChats] = useState<Chat[]>([]);
-  const [employees, setEmployees] = useState<any>([]);
-  const [open, setOpen] = useState<boolean>(false);
-  const history = useHistory();
+  //const [employees, setEmployees] = useState<any>([]);
+  //const [open, setOpen] = useState<boolean>(false);
 
   const fetchAllChats = useCallback(async () => {
     try {
@@ -46,6 +45,7 @@ const MessageTab: React.FC = () => {
     }
   }, []);
 
+  /*
   const fetchAllEmployees = useCallback(async () => {
     try {
       const response = await getAllEmployees();
@@ -55,11 +55,7 @@ const MessageTab: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchAllChats();
-  }, [fetchAllChats]);
-
-  useEffect(() => {
+    useEffect(() => {
     fetchAllEmployees();
   }, [fetchAllEmployees]);
 
@@ -71,6 +67,11 @@ const MessageTab: React.FC = () => {
       console.log(error);
     }
   }, []);
+  */
+
+  useEffect(() => {
+    fetchAllChats();
+  }, [fetchAllChats]);
 
   return (
     <IonPage>
@@ -137,7 +138,8 @@ const MessageTab: React.FC = () => {
             ))}
           </div>
         </div>
-        {user?.role !== "patient" ? (
+        {/*
+         {user?.role !== "patient" ? (
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton className="ion-fab-button">
               <IonIcon
@@ -147,8 +149,10 @@ const MessageTab: React.FC = () => {
             </IonFabButton>
           </IonFab>
         ) : null}
+        */}
       </IonContent>
-      <IonModal isOpen={open}>
+      {/*
+        <IonModal isOpen={open}>
         <IonHeader>
           <IonToolbar>
             <IonTitle>Iniciar una conversación</IonTitle>
@@ -192,6 +196,8 @@ const MessageTab: React.FC = () => {
           </div>
         </IonContent>
       </IonModal>
+      
+      */}
     </IonPage>
   );
 };
