@@ -5,17 +5,20 @@ import {
   IonInput,
   IonPage,
   IonText,
+  IonAlert,
 } from "@ionic/react";
+import { SyntheticEvent, useCallback, useState } from "react";
 
-import LoginImage from "./loginImage.png";
 import "./login.css";
+import LoginImage from "./loginImage.png";
 import { useHistory } from "react-router";
-import login from "../../services/auth/login";
-import { SyntheticEvent, useCallback } from "react";
 import { useAppDispatch } from "../../store";
+import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
+import BackendError from "../../exceptions/backend-error";
 
 const Login: React.FC = () => {
+  const [openAlert, setOpenAlert] = useState(false);
   const history = useHistory();
   const dispatch = useAppDispatch();
   const onLoginSubmit = useCallback(async (event: SyntheticEvent) => {
@@ -35,7 +38,9 @@ const Login: React.FC = () => {
       dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
-      console.log(error);
+      if (error instanceof BackendError && error.statusCode === 403) {
+        setOpenAlert(true);
+      }
     }
   }, []);
 
@@ -62,6 +67,13 @@ const Login: React.FC = () => {
           </IonButton>
         </form>
       </IonContent>
+      <IonAlert
+        isOpen={openAlert}
+        header="Usuario bloqueado"
+        message="El usuario se encuentra hospitalizado o dado de alta."
+        buttons={["Cerrar"]}
+        onDidDismiss={() => setOpenAlert(false)}
+      />
     </IonPage>
   );
 };
