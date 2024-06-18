@@ -5,6 +5,7 @@ const ILEGILITY_ERROR_MESSAGE = "Error ilegible del servidor";
 
 export default class BackendError extends Error implements IBackendError {
   public message: string = "Error desconocido";
+  public statusCode?: number;
   public details?: BackendErrorItem[];
 
   constructor(error: unknown) {
@@ -17,6 +18,10 @@ export default class BackendError extends Error implements IBackendError {
         this.message = error.response.data.message;
         if (error.response.data.details) {
           this.details = error.response.data.details;
+        }
+
+        if (error.response.data.statusCode) {
+          this.statusCode = error.response.data.statusCode;
         }
 
         if (error.response.data.message === "Error de Token") {
