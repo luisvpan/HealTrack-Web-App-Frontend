@@ -49,10 +49,16 @@ import ReportTab from "./pages/report";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
+import runOneSignal from "./services/one-signal/one-signal.service";
+import { useEffect } from "react";
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  useEffect(() => {
+    runOneSignal();
+  });
+
   return (
     <Provider store={store}>
       <IonApp>
@@ -88,9 +94,6 @@ const AppContent: React.FC = () => {
             </Route>
             <Route path="/conversation/:otherId">
               <Conversation />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/tab1" />
             </Route>
             <Route exact path="/report">
               <ReportTab />

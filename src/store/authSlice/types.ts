@@ -3,6 +3,7 @@ export interface AuthState {
     id: number;
     email: string;
     name: string;
+    lastname: string;
     role: string;
   };
   token: null | string;
@@ -14,6 +15,7 @@ export interface AuthStored {
     id: number;
     email: string;
     name: string;
+    lastname: string;
     role: string;
   };
   token: string;

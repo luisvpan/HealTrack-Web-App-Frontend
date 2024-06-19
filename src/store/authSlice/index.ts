@@ -29,6 +29,7 @@ const authSlice = createSlice({
         id: action.payload.id,
         email: action.payload.email,
         name: action.payload.name,
+        lastname: action.payload.lastname,
         role: action.payload.role,
       };
       state.token = action.payload.token;
@@ -39,6 +40,7 @@ const authSlice = createSlice({
             id: action.payload.id,
             email: action.payload.email,
             name: action.payload.name,
+            lastname: action.payload.lastname,
             role: action.payload.role,
           },
           token: action.payload.token,

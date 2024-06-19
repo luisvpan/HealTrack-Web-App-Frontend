@@ -23,6 +23,7 @@ export interface LoginBody {
 export interface LoginResponse {
   id: number;
   name: string;
+  lastname: string;
   email: string;
   role: string;
   token: string;

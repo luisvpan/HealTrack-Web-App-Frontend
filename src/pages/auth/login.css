@@ -2,10 +2,29 @@
   font-size: xx-large;
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.image-container {
+  border-radius: 20px;
+  display: flex;
+  align-self: center;
 }
 
 .login-image {
-  margin-bottom: 32px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-self: center;
 }
 
 .login-input {
@@ -16,5 +35,11 @@
 .login-button {
   width: 100%;
   font-size: large;
-  font-weight: 600;
+  font-weight: 400;
+}
+
+.form-container {
+  padding-top: 120px;
+  padding-left: 20px;
+  padding-right: 20px;
 }

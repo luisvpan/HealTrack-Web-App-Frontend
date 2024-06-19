@@ -2,7 +2,6 @@ import {
   IonAvatar,
   IonButton,
   IonContent,
-  IonFab,
   IonHeader,
   IonIcon,
   IonInput,
@@ -16,6 +15,7 @@ import {
   cameraOutline,
   cameraSharp,
   chevronBackCircle,
+  happySharp,
   sendSharp,
 } from "ionicons/icons";
 import "./Conversation.css";
@@ -33,6 +33,7 @@ import getMessagesById from "../../services/messages/get-messages-by-id.service"
 import { AllRoles, ChatInfo, Message, TranslatedRole } from "../../types";
 import sendMessage from "../../services/messages/create-message.service";
 import useSubmitImage from "./use-submit-image";
+import EmojiPicker from "emoji-picker-react";
 
 const Conversation: React.FC = () => {
   const history = useHistory();
@@ -40,6 +41,7 @@ const Conversation: React.FC = () => {
   //  const [other, setOther] = useState<number>(0);
 
   const { otherId } = useParams<{ otherId: string }>();
+  const [emojiOpen, setEmojiOpen] = useState<boolean>(false);
 
   const handleClick = () => {
     history.push("/messages");
@@ -153,9 +155,7 @@ const Conversation: React.FC = () => {
               className="back-icon"
               onClick={handleClick}
             ></IonIcon>
-            <IonAvatar className="ion-avatar">
-              <img src="https://i.pravatar.cc/300" />
-            </IonAvatar>
+
             {chatInfo && (
               <span className="details">
                 {chatInfo.created_by.id === user!.id ? (
@@ -182,101 +182,96 @@ const Conversation: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <form onSubmit={submitMessage}>
-          <div className="conversation">
-            <div className="chat-section">
-              {!messages
-                ? null
-                : messages.map((message) => (
-                    <>
-                      {message.user.id !== userId ? (
-                        <div className="other messages" key={message.id}>
-                          <div className="message other" key={message.id}>
-                            {message.attachment !== null ? (
-                              <div>
-                                <img
-                                  className="image"
-                                  src={message.attachment}
-                                />
-                              </div>
-                            ) : (
-                              <div> {message.message} </div>
-                            )}
-                          </div>
-                          <span>
-                            {today.toDateString() ===
-                            new Date(message.createdAt).toDateString()
-                              ? new Date(message.createdAt).toLocaleTimeString(
-                                  "es-ES",
-                                  { hour: "2-digit", minute: "2-digit" }
-                                )
-                              : new Date(message.createdAt).toLocaleDateString(
-                                  "es-ES",
-                                  {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  }
-                                )}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="mine messages" key={message.id}>
-                          <div className="message mine" key={message.id}>
-                            {message.attachment && (
-                              <div key={message.id}>
-                                <img
-                                  className="image"
-                                  src={message.attachment}
-                                />
-                              </div>
-                            )}
+        <div className="conversation">
+          <div className="chat-section">
+            {!messages
+              ? null
+              : messages.map((message) => (
+                  <>
+                    {message.user.id !== userId ? (
+                      <div className="other messages" key={message.id}>
+                        <div className="message other" key={message.id}>
+                          {message.attachment !== null ? (
+                            <div>
+                              <img className="image" src={message.attachment} />
+                            </div>
+                          ) : (
                             <div> {message.message} </div>
-                          </div>
-                          <span>
-                            {today.toDateString() ===
-                            new Date(message.createdAt).toDateString()
-                              ? new Date(message.createdAt).toLocaleTimeString(
-                                  "es-ES",
-                                  { hour: "2-digit", minute: "2-digit" }
-                                )
-                              : new Date(message.createdAt).toLocaleDateString(
-                                  "es-ES",
-                                  {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  }
-                                )}
-                          </span>
+                          )}
                         </div>
-                      )}
-                    </>
-                  ))}
-            </div>
+                        <span>
+                          {today.toDateString() ===
+                          new Date(message.createdAt).toDateString()
+                            ? new Date(message.createdAt).toLocaleTimeString(
+                                "es-ES",
+                                { hour: "2-digit", minute: "2-digit" }
+                              )
+                            : new Date(message.createdAt).toLocaleDateString(
+                                "es-ES",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                }
+                              )}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="mine messages" key={message.id}>
+                        <div className="message mine" key={message.id}>
+                          {message.attachment && (
+                            <div key={message.id}>
+                              <img className="image" src={message.attachment} />
+                            </div>
+                          )}
+                          <div> {message.message} </div>
+                        </div>
+                        <span>
+                          {today.toDateString() ===
+                          new Date(message.createdAt).toDateString()
+                            ? new Date(message.createdAt).toLocaleTimeString(
+                                "es-ES",
+                                { hour: "2-digit", minute: "2-digit" }
+                              )
+                            : new Date(message.createdAt).toLocaleDateString(
+                                "es-ES",
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                }
+                              )}
+                        </span>
+                      </div>
+                    )}
+                  </>
+                ))}
           </div>
 
-          <div className="message-input">
-            <IonInput
-              placeholder="Escribe tu mensaje"
-              name="message"
-            ></IonInput>
-            <div className="send-button">
-              <IonButton onClick={() => setOpen(true)}>
-                <IonIcon icon={cameraSharp}></IonIcon>
-              </IonButton>
+          <form onSubmit={submitMessage}>
+            <div className="message-input">
+              <IonInput
+                placeholder="Escribe tu mensaje"
+                name="message"
+              ></IonInput>
+
+              <div className="send-button">
+                <IonButton onClick={() => setOpen(true)}>
+                  <IonIcon icon={cameraSharp}></IonIcon>
+                </IonButton>
+              </div>
+              <div className="send-button">
+                <IonButton type="submit">
+                  <IonIcon icon={sendSharp}></IonIcon>
+                </IonButton>
+              </div>
             </div>
-            <div className="send-button">
-              <IonButton type="submit">
-                <IonIcon icon={sendSharp}></IonIcon>
-              </IonButton>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </IonContent>
 
       <IonModal isOpen={open}>

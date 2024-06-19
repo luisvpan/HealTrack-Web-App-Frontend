@@ -1,21 +1,22 @@
 import {
   IonButton,
   IonContent,
-  IonImg,
   IonInput,
   IonPage,
   IonText,
   IonAlert,
 } from "@ionic/react";
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import OneSignal from "react-onesignal";
 
 import "./login.css";
-import LoginImage from "./loginImage.png";
+
 import { useHistory } from "react-router";
 import { useAppDispatch } from "../../store";
 import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
 import BackendError from "../../exceptions/backend-error";
+import runOneSignal from "../../services/one-signal/one-signal.service";
 
 const Login: React.FC = () => {
   const [openAlert, setOpenAlert] = useState(false);
@@ -35,6 +36,11 @@ const Login: React.FC = () => {
         password: passwordInput.value,
       });
 
+      console.log(user);
+
+      const osresponse = await OneSignal.login(user.id.toString(), user.token);
+
+      console.log(user);
       dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
@@ -47,9 +53,9 @@ const Login: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <IonImg src={LoginImage} className="login-image"></IonImg>
-        <form onSubmit={onLoginSubmit}>
-          <IonText className="login-title">HealTrack</IonText>
+        <form onSubmit={onLoginSubmit} className="form-container">
+          <IonText className="login-title">Bienvenido/a</IonText>
+          <IonText className="subtitle">HealTrack</IonText>
           <IonInput
             name="email"
             placeholder="Correo"
