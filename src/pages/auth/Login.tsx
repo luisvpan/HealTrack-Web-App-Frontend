@@ -16,11 +16,17 @@ import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
 
 import OneSignal from "react-onesignal";
+import useSuccessToast from "../../components/SuccessToast";
+import useErrorToast from "../../components/ErrorToast";
+import BackendError from "../../exceptions/backend-error";
 
 const Login: React.FC = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const successToast = useSuccessToast();
+  const errorToast = useErrorToast();
+
   const onLoginSubmit = useCallback(async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
@@ -35,12 +41,16 @@ const Login: React.FC = () => {
         password: passwordInput.value,
       });
 
+      successToast("Ha iniciado sesión correctamente");
+
       await OneSignal.login(user.id.toString(), user.token);
 
       dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
-      console.log(error);
+      if (error instanceof BackendError) {
+        errorToast(error.message);
+      }
     }
   }, []);
 
