@@ -8,8 +8,6 @@ export async function initOneSignal() {
       appId: APP_ID,
       apiKey: API_KEY,
       allowLocalhostAsSecureOrigin: true,
-      serviceWorkerParam: { scope: "/push/onesignal/js/" },
-      serviceWorkerPath: "/push/onesignal/OneSignalSDKWorker.js",
     });
 
     OneSignal.Slidedown.promptPush();
