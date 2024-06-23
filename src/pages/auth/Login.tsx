@@ -35,11 +35,8 @@ const Login: React.FC = () => {
         password: passwordInput.value,
       });
 
-      console.log(user);
+      await OneSignal.login(user.id.toString(), user.token);
 
-      const osresponse = await OneSignal.login(user.id.toString(), user.token);
-
-      console.log(osresponse);
       dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
