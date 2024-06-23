@@ -50,23 +50,12 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { useEffect, useState } from "react";
 import { initOneSignal } from "./services/one-signal/one-signal.service";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [oneSignalInstance, setOneSignalInstance] = useState<any>(null);
-
-  useEffect(() => {
-    initOneSignal().then((instance) => {
-      setOneSignalInstance(instance);
-    });
-  }, []);
-
-  if (!oneSignalInstance) {
-    return <div>Loading...</div>; // or some other loading indicator
-  }
+  initOneSignal();
   return (
     <Provider store={store}>
       <IonApp>

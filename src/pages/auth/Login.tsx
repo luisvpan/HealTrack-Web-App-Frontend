@@ -14,8 +14,8 @@ import { useHistory } from "react-router";
 import { useAppDispatch } from "../../store";
 import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
-import BackendError from "../../exceptions/backend-error";
-import { getOneSignalInstance } from "../../services/one-signal/one-signal.service";
+
+import OneSignal from "react-onesignal";
 
 const Login: React.FC = () => {
   const [openAlert, setOpenAlert] = useState(false);
@@ -24,8 +24,6 @@ const Login: React.FC = () => {
   const onLoginSubmit = useCallback(async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
-      const oneSignalInstance = getOneSignalInstance();
-
       const form = event.target as HTMLFormElement;
       const emailInput = form.elements.namedItem("email") as HTMLInputElement;
       const passwordInput = form.elements.namedItem(
@@ -39,10 +37,7 @@ const Login: React.FC = () => {
 
       console.log(user);
 
-      const osresponse = await oneSignalInstance.login(
-        user.id.toString(),
-        user.token
-      );
+      const osresponse = await OneSignal.login(user.id.toString(), user.token);
 
       console.log(osresponse);
       dispatch(authUser({ ...user, remember: true }));
