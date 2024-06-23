@@ -6,8 +6,7 @@ import {
   IonText,
   IonAlert,
 } from "@ionic/react";
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import OneSignal from "react-onesignal";
+import { SyntheticEvent, useCallback, useState } from "react";
 
 import "./login.css";
 
@@ -16,7 +15,7 @@ import { useAppDispatch } from "../../store";
 import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
 import BackendError from "../../exceptions/backend-error";
-import runOneSignal from "../../services/one-signal/one-signal.service";
+import { getOneSignalInstance } from "../../services/one-signal/one-signal.service";
 
 const Login: React.FC = () => {
   const [openAlert, setOpenAlert] = useState(false);
@@ -25,6 +24,8 @@ const Login: React.FC = () => {
   const onLoginSubmit = useCallback(async (event: SyntheticEvent) => {
     event.preventDefault();
     try {
+      const oneSignalInstance = getOneSignalInstance();
+
       const form = event.target as HTMLFormElement;
       const emailInput = form.elements.namedItem("email") as HTMLInputElement;
       const passwordInput = form.elements.namedItem(
@@ -38,15 +39,16 @@ const Login: React.FC = () => {
 
       console.log(user);
 
-      const osresponse = await OneSignal.login(user.id.toString(), user.token);
+      const osresponse = await oneSignalInstance.login(
+        user.id.toString(),
+        user.token
+      );
 
-      console.log(user);
+      console.log(osresponse);
       dispatch(authUser({ ...user, remember: true }));
       history.push("/home");
     } catch (error) {
-      if (error instanceof BackendError && error.statusCode === 403) {
-        setOpenAlert(true);
-      }
+      console.log(error);
     }
   }, []);
 
