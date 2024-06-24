@@ -18,3 +18,47 @@
   display: "flex";
   align-self: center;
 }
+
+.please-upload-banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+  background-color: #e6382c;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 12px;
+  border-radius: 6px;
+  font-size: medium;
+}
+
+.uploaded-banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+  background-color: #2aa832;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 12px;
+  border-radius: 6px;
+  font-size: medium;
+}
+
+.check-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.bell-icon {
+  width: 50px;
+  height: 50px;
+}
