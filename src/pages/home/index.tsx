@@ -2,7 +2,6 @@ import {
   IonButton,
   IonContent,
   IonHeader,
-  IonIcon,
   IonPage,
   IonText,
   IonTitle,
@@ -13,7 +12,6 @@ import store, { useAppDispatch } from "../../store";
 import { logout } from "../../store/authSlice";
 import { useHistory } from "react-router";
 
-import { checkmarkCircle, notifications } from "ionicons/icons";
 import useGetWarningInfo from "./use-get-warning-info";
 import WarningBanner from "./warning-banner";
 
