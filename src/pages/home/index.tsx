@@ -6,11 +6,11 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
 import "./HomeTab.css";
 import store, { useAppDispatch } from "../../store";
 import { logout } from "../../store/authSlice";
-import { useHistory } from "react-router";
 
 import useGetWarningInfo from "./use-get-warning-info";
 import WarningBanner from "./warning-banner";
@@ -18,11 +18,11 @@ import WarningBanner from "./warning-banner";
 const HomeTab: React.FC = () => {
   const user = store.getState().auth.user;
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const router = useIonRouter();
 
   const logoutAndReturnToLogin = () => {
     dispatch(logout());
-    history.push("/login");
+    router.push("/login");
   };
   const { warning, isLoading } = useGetWarningInfo();
 

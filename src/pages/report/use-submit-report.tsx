@@ -1,15 +1,15 @@
-import { SyntheticEvent, useCallback } from "react";
-import store from "../../store";
+import { useCallback } from "react";
+
 import { QuestionValues } from ".";
-import { useHistory } from "react-router";
+
 import jsonToFormData from "../../utils/json-to-formData";
 import useSuccessToast from "../../components/SuccessToast";
 import createReport from "../../services/reports/create-report.service";
+import { useIonRouter } from "@ionic/react";
 
 const useSubmitReport = () => {
-  const role = store.getState().auth.user?.role;
   const successToast = useSuccessToast();
-  const history = useHistory();
+  const router = useIonRouter();
   const onSubmit = useCallback(
     async (description: string, report: QuestionValues, file?: File) => {
       try {
@@ -25,7 +25,7 @@ const useSubmitReport = () => {
         const dataToSend = jsonToFormData(body);
         await createReport(dataToSend);
         successToast("Reporte creado con éxito");
-        history.push("/messages");
+        router.push("/messages");
       } catch (error) {
         console.log(error);
       }

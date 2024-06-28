@@ -10,16 +10,16 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
 import {
   cameraOutline,
   cameraSharp,
   chevronBackCircle,
-  happySharp,
   sendSharp,
 } from "ionicons/icons";
 import "./Conversation.css";
-import { useHistory, useParams } from "react-router";
+import { useParams } from "react-router";
 import { Socket, io } from "socket.io-client";
 import store from "../../store";
 import {
@@ -36,15 +36,14 @@ import useSubmitImage from "./use-submit-image";
 import EmojiPicker from "emoji-picker-react";
 
 const Conversation: React.FC = () => {
-  const history = useHistory();
+  const router = useIonRouter();
 
   //  const [other, setOther] = useState<number>(0);
 
   const { otherId } = useParams<{ otherId: string }>();
-  const [emojiOpen, setEmojiOpen] = useState<boolean>(false);
 
   const handleClick = () => {
-    history.push("/messages");
+    router.push("/messages");
   };
 
   const token = store.getState().auth.token;

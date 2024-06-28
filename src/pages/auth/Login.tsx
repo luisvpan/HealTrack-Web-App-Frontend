@@ -5,24 +5,23 @@ import {
   IonPage,
   IonText,
   IonAlert,
+  useIonRouter,
 } from "@ionic/react";
 import { SyntheticEvent, useCallback, useState } from "react";
 
 import "./login.css";
 
-import { useHistory } from "react-router";
 import { useAppDispatch } from "../../store";
 import login from "../../services/auth/login";
 import { authUser } from "../../store/authSlice";
 
-import OneSignal from "react-onesignal";
 import useSuccessToast from "../../components/SuccessToast";
 import useErrorToast from "../../components/ErrorToast";
 import BackendError from "../../exceptions/backend-error";
 
 const Login: React.FC = () => {
   const [openAlert, setOpenAlert] = useState(false);
-  const history = useHistory();
+  const router = useIonRouter();
   const dispatch = useAppDispatch();
   const successToast = useSuccessToast();
   const errorToast = useErrorToast();
@@ -43,10 +42,8 @@ const Login: React.FC = () => {
 
       successToast("Ha iniciado sesión correctamente");
 
-      await OneSignal.login(user.id.toString(), user.token);
-
       dispatch(authUser({ ...user, remember: true }));
-      history.push("/home");
+      router.push("/home");
     } catch (error) {
       if (error instanceof BackendError) {
         errorToast(error.message);
