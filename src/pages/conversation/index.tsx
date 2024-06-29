@@ -34,6 +34,7 @@ import { AllRoles, ChatInfo, Message, TranslatedRole } from "../../types";
 import sendMessage from "../../services/messages/create-message.service";
 import useSubmitImage from "./use-submit-image";
 import EmojiPicker from "emoji-picker-react";
+import { API_BASE_URL } from "../../config/constants";
 
 const Conversation: React.FC = () => {
   const router = useIonRouter();
@@ -54,9 +55,13 @@ const Conversation: React.FC = () => {
 
   const socket = useRef<Socket | null>(null);
 
+  const URL = API_BASE_URL!.endsWith("/api/v1")
+    ? API_BASE_URL!.replace("/api/v1", "")
+    : API_BASE_URL;
+
   useEffect(() => {
-    if (!socket.current) {
-      socket.current = io("http://localhost:3000", {
+    if (!socket.current && URL) {
+      socket.current = io(URL, {
         extraHeaders: {
           Authorization: "Bearer " + token,
         },
