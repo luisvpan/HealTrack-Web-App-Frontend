@@ -5,6 +5,7 @@ import { Report } from "../../types";
 import BackendError from "../../exceptions/backend-error";
 import dayjs from "dayjs";
 import store from "../../store";
+import checkDailyReport from "../../services/reports/check-daily-report.service";
 
 const useGetWarningInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -13,23 +14,12 @@ const useGetWarningInfo = () => {
 
   const errorToast = useErrorToast();
 
-  const validateCreatedReport = (report: Report) => {
-    const creationDate = dayjs(report.createdAt);
-    const today = dayjs();
-
-    if (!creationDate.isSame(today, "day") && today.hour() > 6) {
-      setWarning(true);
-    }
-  };
-
   const getWarningInfo = useCallback(async () => {
     try {
       setIsLoading(true);
       if (!user?.id || user.role !== "patient") return;
-      const reports = await getReportsByUser(user?.id);
-      if (reports.length === 0) {
-        return setWarning(true);
-      } else validateCreatedReport(reports[0]);
+      const response = await checkDailyReport();
+      setWarning(response);
     } catch (error) {
       if (error instanceof BackendError) {
         errorToast(error.message);

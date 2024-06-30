@@ -6,7 +6,7 @@ const WarningBanner = ({ warning, isLoading }: Props) => {
   const user = store.getState().auth.user;
   return (
     <>
-      {warning && user?.role === "patient" && !isLoading && (
+      {!warning && user?.role === "patient" && !isLoading && (
         <div className="please-upload-banner">
           <IonText>
             Nos interesa saber como está tu estado ¡Suba el reporte diario!
@@ -15,7 +15,7 @@ const WarningBanner = ({ warning, isLoading }: Props) => {
         </div>
       )}
 
-      {!warning && user?.role === "patient" && !isLoading && (
+      {warning && user?.role === "patient" && !isLoading && (
         <div className="uploaded-banner">
           <IonText>¡Ya ha subido el reporte del día de hoy!</IonText>
           <IonIcon className="check-icon" icon={checkmarkCircle}></IonIcon>
