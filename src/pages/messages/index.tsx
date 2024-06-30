@@ -11,7 +11,13 @@ import {
   IonAvatar,
   IonBadge,
 } from "@ionic/react";
-import { searchSharp } from "ionicons/icons";
+import {
+  contractSharp,
+  manSharp,
+  personCircle,
+  personSharp,
+  searchSharp,
+} from "ionicons/icons";
 
 import "./MessagesTab.css";
 import getAllChats from "../../services/chats/get-all-chats.service";
@@ -78,7 +84,6 @@ const MessageTab: React.FC = () => {
         <div className="chat-list">
           <div className="heading">
             <h1>Mensajes Recientes</h1>
-            <IonIcon icon={searchSharp} className="header-icon"></IonIcon>
           </div>
 
           <div className="chats">
@@ -89,9 +94,7 @@ const MessageTab: React.FC = () => {
                 detail={false}
                 key={chat.id}
               >
-                <IonAvatar slot="start">
-                  <img src="https://i.pravatar.cc/300" />
-                </IonAvatar>
+                <IonIcon icon={personCircle} className="chat-icon"></IonIcon>
                 <IonLabel className="ion-text-nowrap">
                   {chat.created_by.id === user!.id ? (
                     <h2>
