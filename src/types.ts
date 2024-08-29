@@ -155,3 +155,24 @@ export interface Report {
   deletedAt: string | null;
   user: User;
 }
+
+// MessageNotifications
+export interface MessageNotification {
+  id: number;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  user: User;
+}
+
+// Notifications
+export interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  deletedAt: Date;
+  employee: Employee;
+}
