@@ -24,9 +24,13 @@ import BackendError from "../../exceptions/backend-error";
 import useSuccessToast from "../../components/SuccessToast";
 import useErrorToast from "../../components/ErrorToast";
 import triggerPanicButton from "../../services/patients/panic-button";
+import PatientDetail from "./detail"; 
+import EmployeeDetail from "./employeeDetail";
+import { AllRoles } from "../../types";
 
 const HomeTab: React.FC = () => {
   const user = store.getState().auth.user;
+  const role = store.getState().auth.user?.role;
   const dispatch = useAppDispatch();
   const router = useIonRouter();
   
@@ -108,17 +112,21 @@ const HomeTab: React.FC = () => {
             <IonButton onClick={() => setOpenChangePasswordModal(true)}>
               Cambiar Contraseña
             </IonButton>
-            <IonButton
-              onClick={() => setOpenPanicConfirmModal(true)}
-              color="danger"
-              disabled={panicButtonLoading}
-            >
-              {panicButtonLoading ? "Activando..." : "Botón de Pánico"}
-            </IonButton>
+            {role !== AllRoles.PATIENT ? null : (
+              <IonButton
+                onClick={() => setOpenPanicConfirmModal(true)}
+                color="danger"
+                disabled={panicButtonLoading}
+              >
+                {panicButtonLoading ? "Activando..." : "Botón de Pánico"}
+              </IonButton>
+            )}
             <IonButton onClick={() => logoutAndReturnToLogin()}>
               Cerrar Sesión
             </IonButton>
           </div>
+
+          {role === AllRoles.PATIENT ? <PatientDetail /> : <EmployeeDetail/>}
         </div>
       </IonContent>
 

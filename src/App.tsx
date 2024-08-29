@@ -49,6 +49,7 @@ import ReportTab from "./pages/report";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
+import { AllRoles } from "../src/types";
 
 import { initOneSignal } from "./services/one-signal/one-signal.service";
 
@@ -104,11 +105,13 @@ const AppContent: React.FC = () => {
           <IonIcon aria-hidden="true" icon={home} />
           <IonLabel>Home</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="messages" href="/messages">
-          <IonIcon aria-hidden="true" icon={chatbubbles} />
-          <IonLabel>Mensajes</IonLabel>
-        </IonTabButton>
-        {role !== "patient" ? null : (
+        {role === AllRoles.ADMIN ? null : (
+          <IonTabButton tab="messages" href="/messages">
+            <IonIcon aria-hidden="true" icon={chatbubbles} />
+            <IonLabel>Mensajes</IonLabel>
+          </IonTabButton>
+        )}
+        {role !== AllRoles.PATIENT ? null : (
           <IonTabButton tab="report" href="/report">
             <IonIcon aria-hidden="true" icon={alarm} />
             <IonLabel>Reporte</IonLabel>
