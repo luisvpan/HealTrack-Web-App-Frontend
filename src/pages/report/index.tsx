@@ -5,12 +5,15 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
+  IonItem,
   IonLabel,
   IonList,
   IonModal,
   IonPage,
   IonRadio,
   IonRadioGroup,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToast,
   IonToolbar,
@@ -62,6 +65,18 @@ const ReportTab: React.FC = () => {
     setAnswers(newAnswers);
   };
 
+  const [surgeryExpense, setSurgeryExpense] = useState("No")
+
+  const selectValues = [
+    {value: "No", label: "No"},
+    {value: "Si, de alimentación", label: "Si, de alimentación"},
+    {value: "Si, de traslado", label: "Si, de traslado"},
+    {value: "Si, pago a cuidadores", label: "Si, pago a cuidadores"},
+    {value: "Si, de medicamentos", label: "Si, de medicamentos"},
+  ]
+
+  const [surgeryExpenseAmount, setSurgeryExpenseAmount] = useState(0.0)
+
   const onReportSubmit = useSubmitReport();
 
   const file = useRef<HTMLInputElement>(null);
@@ -107,6 +122,32 @@ const ReportTab: React.FC = () => {
                   </div>
                 )
               )}
+
+              <IonItem>
+                <IonSelect 
+                  label="¿Tuvo gasto relacionado con la cirugía?" 
+                  placeholder="Selecciona una opción" 
+                  onIonChange={(event) => {
+                    setSurgeryExpense(event.target.value as string);
+                  }}>
+                  {selectValues.map((item)=>(<IonSelectOption value={item.value}>{item.label}</IonSelectOption>))}
+                </IonSelect>
+              </IonItem>
+
+              {surgeryExpense !== "No" && (
+                <>
+                <IonLabel>Monto del Gasto en Cirugía:</IonLabel>
+                <IonInput
+                  name="surgeryExpenseAmount"
+                  placeholder="Monto"
+                  type="number"
+                  onIonChange={(event) => {
+                    setSurgeryExpenseAmount(event.target.value as number);
+                  }}
+                />
+              </>
+              )}
+
               <IonLabel>Descripción (opcional):</IonLabel>
               <IonInput
                 name="description"
@@ -122,7 +163,7 @@ const ReportTab: React.FC = () => {
                   if (Object.values(answers).filter(Boolean).length >= 2) {
                     setOpen(true);
                   } else {
-                    onReportSubmit(description, answers);
+                    onReportSubmit(description, answers, surgeryExpense, surgeryExpenseAmount);
                   }
                 }}
               >
@@ -160,7 +201,7 @@ const ReportTab: React.FC = () => {
               <IonButton
                 onClick={(e) => {
                   setOpen(false);
-                  onReportSubmit(description, answers, fileData);
+                  onReportSubmit(description, answers, surgeryExpense, surgeryExpenseAmount, fileData);
                   setAnswers(initialValues);
                 }}
               >

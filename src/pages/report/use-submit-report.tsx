@@ -11,13 +11,15 @@ const useSubmitReport = () => {
   const successToast = useSuccessToast();
   const router = useIonRouter();
   const onSubmit = useCallback(
-    async (description: string, report: QuestionValues, file?: File) => {
+    async (description: string, report: QuestionValues, surgeryExpense: string, surgeryExpenseAmount: number, file?: File) => {
       try {
         const body = {
           hasHighTemperature: report.hasHighTemperature,
           hasRedness: report.hasRedness,
           hasSwelling: report.hasSwelling,
           hasSecretions: report.hasSecretions,
+          surgeryExpense,
+          surgeryExpenseAmount,
           additionalInformation: description,
           ...(!!file ? { file: file } : {}),
         };
