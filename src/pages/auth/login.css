@@ -30,6 +30,7 @@
 .login-input {
   font-size: large;
   margin-bottom: 32px;
+  width: calc(100% - 40px);
 }
 
 .login-button {
@@ -38,8 +39,33 @@
   font-weight: 400;
 }
 
+.forgot-password-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  color: #3880ff;
+  cursor: pointer;
+}
+
 .form-container {
   padding-top: 120px;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.modal-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
