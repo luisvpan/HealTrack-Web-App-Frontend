@@ -19,12 +19,14 @@ import MessageNotificationSection from './pages/messageNotifications';
 import Login from './pages/auth/Login';
 import Conversation from './pages/conversation';
 import ReportTab from './pages/report';
+import NotificationSection from './pages/notifications';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import store from './store';
 import { AllRoles } from '../src/types';
 import { initOneSignal } from './services/one-signal/one-signal.service';
 import { getUnreadMessageNotificationsCount } from './services/messageNotifications/get-message-notifications-unread';
+import { getUnreadNotificationsCount } from './services/notifications/get-notifications-unread';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -60,15 +62,30 @@ const App: React.FC = () => {
 const AppContent: React.FC = () => {
   const location = useLocation();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [panicUnreadCount, setPanicUnreadCount] = useState(0);
   const token = store.getState().auth.token;
   const role = store.getState().auth.user?.role;
 
-  const fetchUnreadNotificationsCount = useCallback(async () => {
+  // Callback to fetch unread message notifications count
+  const fetchUnreadMessageNotificationsCount = useCallback(async () => {
     const userId = store.getState().auth.user?.id;
     if (userId) {
       try {
         const count = await getUnreadMessageNotificationsCount(userId);
         setUnreadCount(count);
+      } catch (error) {
+        console.error('Error fetching unread message notifications count:', error);
+      }
+    }
+  }, []);
+
+  // Callback to fetch unread general notifications count
+  const fetchUnreadNotificationsCount = useCallback(async () => {
+    const userId = store.getState().auth.user?.id;
+    if (userId) {
+      try {
+        const count = await getUnreadNotificationsCount(userId);
+        setPanicUnreadCount(count); // Assuming panic notifications are a subset of notifications
       } catch (error) {
         console.error('Error fetching unread notifications count:', error);
       }
@@ -76,13 +93,21 @@ const AppContent: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    fetchUnreadMessageNotificationsCount();
+    const intervalId1 = setInterval(() => {
+      fetchUnreadMessageNotificationsCount();
+    }, 30000); // 30 segundos
+
     fetchUnreadNotificationsCount();
-    const intervalId = setInterval(() => {
+    const intervalId2 = setInterval(() => {
       fetchUnreadNotificationsCount();
     }, 30000); // 30 segundos
 
-    return () => clearInterval(intervalId);
-  }, [fetchUnreadNotificationsCount]);
+    return () => {
+      clearInterval(intervalId1);
+      clearInterval(intervalId2);
+    };
+  }, [fetchUnreadMessageNotificationsCount, fetchUnreadNotificationsCount]);
 
   return (
     <IonTabs>
@@ -108,6 +133,9 @@ const AppContent: React.FC = () => {
             </Route>
             <Route exact path="/message-notifications">
               <MessageNotificationSection />
+            </Route>
+            <Route exact path="/notifications">
+              <NotificationSection />
             </Route>
           </>
         )}
@@ -139,6 +167,18 @@ const AppContent: React.FC = () => {
               style={{ display: unreadCount > 0 ? 'block' : 'none' }}
             >
               {unreadCount}
+            </IonBadge>
+          </IonTabButton>
+        )}
+        {role === AllRoles.ADMIN || role === AllRoles.PATIENT ? null : (
+          <IonTabButton tab="panic-button" href="/notifications">
+            <IonIcon aria-hidden="true" icon={notifications} />
+            <IonLabel>Panic Button</IonLabel>
+            <IonBadge 
+              color="danger" 
+              style={{ display: panicUnreadCount > 0 ? 'block' : 'none' }}
+            >
+              {panicUnreadCount}
             </IonBadge>
           </IonTabButton>
         )}
