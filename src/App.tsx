@@ -12,7 +12,7 @@ import {
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { alarm, chatbubbles, home, notifications } from 'ionicons/icons';
+import { alarm, chatbubbles, home, list, notifications } from 'ionicons/icons';
 import HomeTab from './pages/home';
 import MessagesTab from './pages/messages';
 import MessageNotificationSection from './pages/messageNotifications';
@@ -20,6 +20,9 @@ import Login from './pages/auth/Login';
 import Conversation from './pages/conversation';
 import ReportTab from './pages/report';
 import NotificationSection from './pages/notifications';
+import ReportList from './pages/report-list';
+import EditReport from './pages/report-list/edit';
+
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -131,11 +134,17 @@ const AppContent: React.FC = () => {
             <Route exact path="/report">
               <ReportTab />
             </Route>
+            <Route exact path="/report-list">
+              <ReportList />
+            </Route>
             <Route exact path="/message-notifications">
               <MessageNotificationSection />
             </Route>
             <Route exact path="/notifications">
               <NotificationSection />
+            </Route>
+            <Route exact path="/reports/edit/:id">
+              <EditReport />
             </Route>
           </>
         )}
@@ -155,7 +164,13 @@ const AppContent: React.FC = () => {
         {role === AllRoles.PATIENT ? (
           <IonTabButton tab="report" href="/report">
             <IonIcon aria-hidden="true" icon={alarm} />
-            <IonLabel>Reporte</IonLabel>
+            <IonLabel>Formulario</IonLabel>
+          </IonTabButton>
+        ) : null}
+        {role === AllRoles.PATIENT ? (
+          <IonTabButton tab="report-list" href="/report-list">
+            <IonIcon aria-hidden="true" icon={list} />
+            <IonLabel>Reportes</IonLabel>
           </IonTabButton>
         ) : null}
         {role === AllRoles.ADMIN ? null : (

@@ -149,6 +149,9 @@ export interface Report {
   hasRedness: boolean;
   hasSwelling: boolean;
   hasSecretions: boolean;
+  surgeryExpense: string;
+  surgeryExpenseAmount: number;
+  additionalInformation: string | null;
   fileUrl: string | null;
   createdAt: string;
   updatedAt: string;

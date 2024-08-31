@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { SyntheticEvent, useCallback, useState } from "react";
+import healtrackLogo from "../../components/HealTrack.png";
 
 import "./login.css";
 
@@ -74,8 +75,11 @@ const Login: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <form onSubmit={onLoginSubmit} className="form-container">
-          <IonText className="login-title">Bienvenido/a</IonText>
-          <IonText className="subtitle">HealTrack</IonText>
+          <div className="logo-title-container">
+          <img src={healtrackLogo} alt="HealTrack Logo" className="logo" />
+            <IonText className="login-title">HealTrack</IonText>
+          </div>
+          <IonText className="subtitle">Bienvenido/a</IonText>
           <IonInput
             name="email"
             placeholder="Correo"

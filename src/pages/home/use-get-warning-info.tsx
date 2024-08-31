@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import useErrorToast from "../../components/ErrorToast";
-import getReportsByUser from "../../services/reports/get-reports-by-user.service";
+import getReportsByUser from "../../services/reports/get-reports-by-user";
 import { Report } from "../../types";
 import BackendError from "../../exceptions/backend-error";
 import dayjs from "dayjs";
