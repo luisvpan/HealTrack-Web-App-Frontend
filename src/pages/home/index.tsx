@@ -92,6 +92,14 @@ const HomeTab: React.FC = () => {
     setOpenPanicConfirmModal(false);
   };
 
+  const goToRecommendations = () => {
+    router.push("/recommendations");
+  };
+
+  const goToFAQs = () => {
+    router.push("/chat-bot");
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -109,7 +117,7 @@ const HomeTab: React.FC = () => {
           <WarningBanner warning={warning} isLoading={isLoading} />
 
           <div className="button-group">
-            <IonButton onClick={() => setOpenChangePasswordModal(true)}>
+            <IonButton color="medium" onClick={() => setOpenChangePasswordModal(true)}>
               Cambiar Contraseña
             </IonButton>
             {role !== AllRoles.PATIENT ? null : (
@@ -126,7 +134,23 @@ const HomeTab: React.FC = () => {
             </IonButton>
           </div>
 
-          {role === AllRoles.PATIENT ? <PatientDetail /> : <EmployeeDetail/>}
+          <IonButton 
+            color="light" 
+            expand="block" 
+            onClick={goToRecommendations}
+          >
+            Ir a Recomendaciones
+          </IonButton>
+
+          <IonButton 
+            color="light" 
+            expand="block" 
+            onClick={goToFAQs}
+          >
+            Ir a ChatBot
+          </IonButton>
+
+          {role === AllRoles.PATIENT ? <PatientDetail /> : <EmployeeDetail />}
         </div>
       </IonContent>
 

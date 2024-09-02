@@ -105,7 +105,7 @@ const ReportsList: FunctionComponent<Prop> = ({ className }) => {
             </div>
           </div>
         </IonCardHeader>
-        <IonCardContent>
+        <IonCardContent className="content">
           <div className="table-wrapper">
             <div className="table-container">
               <Table
@@ -115,6 +115,9 @@ const ReportsList: FunctionComponent<Prop> = ({ className }) => {
                 setPaginationData={setPagination}
               />
             </div>
+          </div>
+          <div className="pagination-container">
+            {/* Agrega aquí el componente de paginación */}
           </div>
         </IonCardContent>
       </IonCard>
@@ -164,6 +167,7 @@ export default styled(ReportsList)`
   width: 100%;
   display: flex;
   flex-direction: column;
+  height: 100vh; /* Asegura que el contenedor principal ocupe toda la altura de la pantalla */
 
   .header-container {
     display: flex;
@@ -179,13 +183,25 @@ export default styled(ReportsList)`
     gap: 10px;
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    height: calc(90vh - 56px); /* Ajusta la altura disponible para el contenido */
+  }
+
   .table-wrapper {
-    overflow-x: auto; /* Permitir el scroll horizontal en el contenedor de la tabla */
+    overflow-y: auto; /* Permitir el scroll vertical en el contenedor de la tabla */
+    flex: 1; /* Permite que el contenedor ocupe el espacio restante */
   }
 
   .table-container {
     min-width: 1000px; /* Ancho mínimo de la tabla para asegurar el scroll horizontal */
-    max-height: 600px; /* Ajusta según el espacio disponible en la pantalla */
+    height: 100%; /* Asegura que el contenedor de la tabla ocupe toda la altura disponible */
+  }
+
+  .pagination-container {
+    margin-top: 10px; /* Espacio entre la tabla y el botón de paginación */
+    padding: 10px; /* Opcional: para mayor separación */
   }
 
   .buttons-container {

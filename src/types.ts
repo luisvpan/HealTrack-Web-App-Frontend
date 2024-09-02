@@ -179,3 +179,17 @@ export interface Notification {
   deletedAt: Date;
   employee: Employee;
 }
+
+// Reccomendations
+export interface Recommendation {
+  id: number;
+  title: string;
+  content: string;
+}
+
+// FAQs
+export interface FAQs {
+  id: number;
+  question: string;
+  answer: string;
+}

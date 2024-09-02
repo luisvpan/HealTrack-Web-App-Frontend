@@ -22,6 +22,8 @@ import ReportTab from './pages/report';
 import NotificationSection from './pages/notifications';
 import ReportList from './pages/report-list';
 import EditReport from './pages/report-list/edit';
+import RecommendationList from './pages/recommendations';
+import FAQList from './pages/FAQs';
 
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
@@ -145,6 +147,12 @@ const AppContent: React.FC = () => {
             </Route>
             <Route exact path="/reports/edit/:id">
               <EditReport />
+            </Route>
+            <Route exact path="/recommendations">
+              <RecommendationList />
+            </Route>
+            <Route exact path="/chat-bot">
+              <FAQList />
             </Route>
           </>
         )}
