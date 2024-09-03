@@ -183,10 +183,22 @@ export default styled(ReportsList)`
     gap: 10px;
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    height: calc(90vh - 56px); /* Ajusta la altura disponible para el contenido */
+  /* Estilos para pantallas pequeñas (XS a MD) */
+  @media (max-width: 768px) {
+    .content {
+      display: flex;
+      flex-direction: column;
+      height: calc(90vh - 56px); 
+    }
+  }
+
+  /* Estilos para pantallas más grandes */
+  @media (min-width: 769px) {
+    .content {
+      display: flex;
+      flex-direction: column;
+      height: calc(85vh - 56px); 
+    }
   }
 
   .table-wrapper {

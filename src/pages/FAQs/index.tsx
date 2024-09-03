@@ -33,7 +33,7 @@ const FAQList: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonButton className="back-button" onClick={goHome}>
+        <IonButton className="back-button" expand="full" onClick={goHome}>
           Volver al Inicio
         </IonButton>
         <IonList>

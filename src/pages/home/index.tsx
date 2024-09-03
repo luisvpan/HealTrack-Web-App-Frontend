@@ -11,11 +11,13 @@ import {
   IonLabel,
   IonItem,
   useIonRouter,
+  IonIcon,
 } from "@ionic/react";
 import { useState } from "react";
 import "./HomeTab.css";
 import store, { useAppDispatch } from "../../store";
 import { logout } from "../../store/authSlice";
+import { chatbubbleEllipsesOutline, bookOutline } from "ionicons/icons";
 
 import useGetWarningInfo from "./use-get-warning-info";
 import WarningBanner from "./warning-banner";
@@ -134,21 +136,15 @@ const HomeTab: React.FC = () => {
             </IonButton>
           </div>
 
-          <IonButton 
-            color="light" 
-            expand="block" 
-            onClick={goToRecommendations}
-          >
-            Ir a Recomendaciones
-          </IonButton>
+          <div className="horizontal-buttons">
+            <IonButton color="light" onClick={goToRecommendations}>
+              <IonIcon slot="start" icon={bookOutline} /> Recomendaciones
+            </IonButton>
 
-          <IonButton 
-            color="light" 
-            expand="block" 
-            onClick={goToFAQs}
-          >
-            Ir a ChatBot
-          </IonButton>
+            <IonButton color="light" onClick={goToFAQs}>
+              <IonIcon slot="start" icon={chatbubbleEllipsesOutline} /> ChatBot
+            </IonButton>
+          </div>
 
           {role === AllRoles.PATIENT ? <PatientDetail /> : <EmployeeDetail />}
         </div>

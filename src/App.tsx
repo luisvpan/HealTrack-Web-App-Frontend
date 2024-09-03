@@ -12,7 +12,7 @@ import {
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { alarm, chatbubbles, home, list, notifications } from 'ionicons/icons';
+import { alarm, chatbubbles, home, list, notifications, warning } from 'ionicons/icons';
 import HomeTab from './pages/home';
 import MessagesTab from './pages/messages';
 import MessageNotificationSection from './pages/messageNotifications';
@@ -46,6 +46,7 @@ import '@ionic/react/css/display.css';
 import '@ionic/react/css/palettes/dark.system.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './theme/variables.css';
+import { Host } from 'ionicons/dist/types/stencil-public-runtime';
 
 setupIonicReact();
 
@@ -136,7 +137,7 @@ const AppContent: React.FC = () => {
             <Route exact path="/report">
               <ReportTab />
             </Route>
-            <Route exact path="/report-list">
+            <Route exact path="/list-report">
               <ReportList />
             </Route>
             <Route exact path="/message-notifications">
@@ -176,7 +177,7 @@ const AppContent: React.FC = () => {
           </IonTabButton>
         ) : null}
         {role === AllRoles.PATIENT ? (
-          <IonTabButton tab="report-list" href="/report-list">
+          <IonTabButton tab="list-report" href="/list-report">
             <IonIcon aria-hidden="true" icon={list} />
             <IonLabel>Reportes</IonLabel>
           </IonTabButton>
@@ -195,7 +196,7 @@ const AppContent: React.FC = () => {
         )}
         {role === AllRoles.ADMIN || role === AllRoles.PATIENT ? null : (
           <IonTabButton tab="panic-button" href="/notifications">
-            <IonIcon aria-hidden="true" icon={notifications} />
+            <IonIcon aria-hidden="true" icon={warning} />
             <IonLabel>Panic Button</IonLabel>
             <IonBadge 
               color="danger" 
