@@ -11,7 +11,7 @@ export default function useUserReportsData(userId: number) {
   const [pagination, setPagination] = useState<PaginationData>({
     total: 0,
     page: 1,
-    limit: 5,
+    limit: 7,
     totalPages: 0,
   });
 

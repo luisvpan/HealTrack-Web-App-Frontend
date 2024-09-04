@@ -76,7 +76,7 @@ const Login: React.FC = () => {
       <IonContent fullscreen>
         <form onSubmit={onLoginSubmit} className="form-container">
           <div className="logo-title-container">
-          <img src={healtrackLogo} alt="HealTrack Logo" className="logo" />
+            <img src={healtrackLogo} alt="HealTrack Logo" className="logo" />
             <IonText className="login-title">HealTrack</IonText>
           </div>
           <IonText className="subtitle">Bienvenido/a</IonText>
