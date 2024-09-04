@@ -159,7 +159,10 @@ const AppContent: React.FC = () => {
         )}
       </IonRouterOutlet>
 
-      <IonTabBar slot={location.pathname !== "/login" ? "bottom" : undefined}>
+      <IonTabBar 
+        slot={location.pathname !== "/login" ? "bottom" : undefined}
+        style={{ width: '100%', overflowX: 'auto', whiteSpace: 'nowrap' }}
+      >
         <IonTabButton tab="home" href="/home">
           <IonIcon aria-hidden="true" icon={home} />
           <IonLabel>Home</IonLabel>
