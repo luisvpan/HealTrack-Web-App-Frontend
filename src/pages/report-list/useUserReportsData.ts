@@ -21,8 +21,6 @@ export default function useUserReportsData(userId: number) {
       if (userId) {
         const response = await getReportsByUser(
           userId,
-          "",
-          "",
           pagination.limit,
           pagination.page
         );
