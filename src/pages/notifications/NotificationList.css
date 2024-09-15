@@ -1,0 +1,35 @@
+.notification-list {
+    margin: 10px;
+  }
+  
+  .notification-list .item-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .notification-list .item-container .notification-title {
+    font-weight: bold;
+  }
+  
+  .notification-list .item-container .notification-date {
+    font-size: 0.8rem;
+    color: gray;
+  }
+  
+  .notification-list .modal-content {
+    padding: 20px;
+  }
+  
+  .notification-list .modal-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .notification-list .modal-content p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  

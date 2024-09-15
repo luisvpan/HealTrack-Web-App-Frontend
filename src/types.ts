@@ -10,6 +10,82 @@ export interface User {
   deletedAt: string | null;
 }
 
+// Patient
+export enum SexType {
+  SEX1 = "M",
+  SEX2 = "F",
+}
+
+export interface Hospital {
+  name: string;
+}
+
+export interface Employee {
+  id: number;
+  user: User;
+  hospital: Hospital;
+  deletedAt: Date;
+}
+
+export enum SurgeryType {
+  SURGERYTYPE1 = "A",
+  SURGERYTYPE2 = "B",
+  SURGERYTYPE3 = "C",
+}
+
+export enum StatusPatient {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  EMERGENCY = "emergency",
+  CLOSED = "closed",
+}
+
+export enum TranslatedPatientStatus {
+  active = "En seguimiento",
+  inactive = "Dado de Alta",
+  emergency = "Hospitalizado",
+  closed = "Caso Cerrado",
+}
+
+export const StatusPatientOptions = [
+  { label: TranslatedPatientStatus.active, value: StatusPatient.ACTIVE },
+  { label: TranslatedPatientStatus.inactive, value: StatusPatient.INACTIVE },
+  { label: TranslatedPatientStatus.emergency, value: StatusPatient.EMERGENCY },
+  { label: TranslatedPatientStatus.closed, value: StatusPatient.CLOSED },
+];
+
+export interface PaginationData {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PaginatedReportResult {
+  data: Report[];
+  paginationData: PaginationData;
+}
+
+export interface Patient {
+  id: number;
+  user: User;
+  age: number;
+  sex: SexType;
+  address: string;
+  personalPhone: string;
+  homePhone: string;
+  hospital: Hospital;
+  surgeryDate: string;
+  surgeryProcedure: string;
+  surgeryType: SurgeryType;
+  automaticTracking: boolean;
+  status: StatusPatient;
+  deletedAt: Date;
+  medic: Employee;
+  patientReports?: PaginatedReportResult;
+}
+
+// Roles
 export enum AllRoles {
   ADMIN = "admin",
   SPECIALIST = "specialist",
@@ -73,9 +149,47 @@ export interface Report {
   hasRedness: boolean;
   hasSwelling: boolean;
   hasSecretions: boolean;
+  surgeryExpense: string;
+  surgeryExpenseAmount: number;
+  additionalInformation: string | null;
   fileUrl: string | null;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
   user: User;
+}
+
+// MessageNotifications
+export interface MessageNotification {
+  id: number;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  user: User;
+}
+
+// Notifications
+export interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  deletedAt: Date;
+  employee: Employee;
+}
+
+// Reccomendations
+export interface Recommendation {
+  id: number;
+  title: string;
+  content: string;
+}
+
+// FAQs
+export interface FAQs {
+  id: number;
+  question: string;
+  answer: string;
 }
