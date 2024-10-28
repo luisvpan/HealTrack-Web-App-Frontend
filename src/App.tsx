@@ -24,6 +24,7 @@ import ReportList from './pages/report-list';
 import EditReport from './pages/report-list/edit';
 import RecommendationList from './pages/recommendations';
 import FAQList from './pages/FAQs';
+import FormularyTab from './pages/appForm';
 
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
@@ -154,6 +155,12 @@ const AppContent: React.FC = () => {
             </Route>
             <Route exact path="/chat-bot">
               <FAQList />
+            </Route>
+            {/**RecommendationsAppPage
+             * CreateAppForm
+             */}
+            <Route exact path="/satistaction-formulary">
+              <FormularyTab />
             </Route>
           </>
         )}

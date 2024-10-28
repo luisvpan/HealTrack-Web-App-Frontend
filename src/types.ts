@@ -193,3 +193,23 @@ export interface FAQs {
   question: string;
   answer: string;
 }
+
+// AppForm
+export interface AppFormulary {
+  id: number;
+  isRespondingForEmployee: boolean;
+  likeApp: string;
+  innescesaryDificultToUse: string;
+  easyToUse: string;
+  needExpertSupport: string;
+  wellIntegratedFunctions: string;
+  manyContradictions: string;
+  peopleLearnQuickly: string;
+  tediousToUse: string;
+  feltConfidentUsing: string;
+  neededKnowledgeBeforeUse: string;
+  additionalInformation: string | null;
+  createdAt: string;
+  deletedAt: string | null;
+  user: User;
+}
