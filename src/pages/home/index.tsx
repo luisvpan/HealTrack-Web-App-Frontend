@@ -12,8 +12,9 @@ import {
   IonItem,
   useIonRouter,
   IonIcon,
+  IonToast,
 } from "@ionic/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./HomeTab.css";
 import store, { useAppDispatch } from "../../store";
 import { logout } from "../../store/authSlice";
@@ -26,13 +27,16 @@ import BackendError from "../../exceptions/backend-error";
 import useSuccessToast from "../../components/SuccessToast";
 import useErrorToast from "../../components/ErrorToast";
 import triggerPanicButton from "../../services/patients/panic-button";
-import PatientDetail from "./detail"; 
+import PatientDetail from "./detail";
 import EmployeeDetail from "./employeeDetail";
-import { AllRoles } from "../../types";
+import { AllRoles, StatusPatient } from "../../types";
+import getPatientByUserId from "../../services/patients/get-patient-by-user-id";
+import checkUserFormSubmission from "../../services/appForm/check-user-form-submission";
 
 const HomeTab: React.FC = () => {
   const user = store.getState().auth.user;
   const role = store.getState().auth.user?.role;
+  const isPatient = role === AllRoles.PATIENT;
   const dispatch = useAppDispatch();
   const router = useIonRouter();
   
@@ -44,6 +48,9 @@ const HomeTab: React.FC = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [panicButtonLoading, setPanicButtonLoading] = useState(false);
+  const [patientStatus, setPatientStatus] = useState<string | null>(null);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean | null>(null);
+  const [showSubmissionMessage, setShowSubmissionMessage] = useState(false);
 
   const successToast = useSuccessToast();
   const errorToast = useErrorToast();
@@ -102,6 +109,43 @@ const HomeTab: React.FC = () => {
     router.push("/chat-bot");
   };
 
+  const goToCalifications = () => {
+    if (hasSubmitted) {
+      setShowSubmissionMessage(true);
+    } else {
+      router.push("/satistaction-formulary");
+    }
+  };
+
+  useEffect(() => {
+    const fetchPatientStatus = async () => {
+      if (isPatient && user?.id) {
+        try {
+          const patientData = await getPatientByUserId(user.id);
+          setPatientStatus(patientData.status);
+        } catch (error) {
+          console.error("Error al obtener el estado del paciente:", error);
+        }
+      }
+    };
+
+    const fetchFormSubmissionStatus = async () => {
+      if (user?.id) {
+        try {
+          const submissionStatus = await checkUserFormSubmission(user.id);
+          setHasSubmitted(submissionStatus);
+        } catch (error) {
+          console.error("Error al verificar si el usuario llenó el formulario:", error);
+        }
+      }
+    };
+    
+    fetchPatientStatus();
+    fetchFormSubmissionStatus();
+  }, [isPatient, user]);
+
+  const showCalificationsButton = isPatient && (patientStatus === StatusPatient.INACTIVE || patientStatus === StatusPatient.CLOSED);
+
   return (
     <IonPage>
       <IonHeader>
@@ -122,7 +166,7 @@ const HomeTab: React.FC = () => {
             <IonButton color="medium" onClick={() => setOpenChangePasswordModal(true)}>
               Cambiar Contraseña
             </IonButton>
-            {role !== AllRoles.PATIENT ? null : (
+            {isPatient && (
               <IonButton
                 onClick={() => setOpenPanicConfirmModal(true)}
                 color="danger"
@@ -136,6 +180,18 @@ const HomeTab: React.FC = () => {
             </IonButton>
           </div>
 
+          {showCalificationsButton && (
+            <div style={{ display: "flex", flexDirection: "column", textAlign: "center", marginTop: "10px" }}>
+              <IonText>Califica nuestra aplicación</IonText>
+              <IonButton 
+                onClick={() => goToCalifications()} 
+                style={{ marginTop: "10px", fontSize: "14px", padding: "6px 120px" }}
+              >
+                Califícanos
+              </IonButton>
+            </div>
+          )}
+
           <div className="horizontal-buttons">
             <IonButton color="light" onClick={goToRecommendations}>
               <IonIcon slot="start" icon={bookOutline} /> Recomendaciones
@@ -148,80 +204,14 @@ const HomeTab: React.FC = () => {
 
           {role === AllRoles.PATIENT ? <PatientDetail /> : <EmployeeDetail />}
         </div>
+        
+        <IonToast
+          isOpen={showSubmissionMessage}
+          onDidDismiss={() => setShowSubmissionMessage(false)}
+          message="Ya llenaste el formulario, gracias por tus comentarios."
+          duration={3000}
+        />
       </IonContent>
-
-      <IonModal isOpen={openChangePasswordModal} onDidDismiss={() => setOpenChangePasswordModal(false)}>
-        <div className="modal-content">
-          <IonText className="modal-title">Cambiar Contraseña</IonText>
-
-          <IonItem>
-            <IonLabel position="floating">Correo Electrónico</IonLabel>
-            <IonInput
-              type="email"
-              value={email}
-              onIonChange={(e) => setEmail(e.detail.value!)}
-              required
-            />
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating">Contraseña Actual</IonLabel>
-            <IonInput
-              type={showCurrentPassword ? "text" : "password"}
-              value={currentPassword}
-              onIonChange={(e) => setCurrentPassword(e.detail.value!)}
-              required
-            />
-            <IonButton slot="end" onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
-              {showCurrentPassword ? "Ocultar" : "Mostrar"}
-            </IonButton>
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating">Nueva Contraseña</IonLabel>
-            <IonInput
-              type={showNewPassword ? "text" : "password"}
-              value={newPassword}
-              onIonChange={(e) => setNewPassword(e.detail.value!)}
-              required
-            />
-            <IonButton slot="end" onClick={() => setShowNewPassword(!showNewPassword)}>
-              {showNewPassword ? "Ocultar" : "Mostrar"}
-            </IonButton>
-          </IonItem>
-
-          <IonButton expand="block" onClick={handleChangePassword}>
-            Guardar Cambios
-          </IonButton>
-          <IonButton expand="block" color="light" onClick={() => setOpenChangePasswordModal(false)}>
-            Cancelar
-          </IonButton>
-        </div>
-      </IonModal>
-
-      <IonModal isOpen={openPanicConfirmModal} onDidDismiss={() => setOpenPanicConfirmModal(false)}>
-        <div className="modal-content">
-          <IonText className="modal-title">Activar Botón de Pánico</IonText>
-          <IonText className="modal-subtitle">¿Estás seguro de que deseas activar el botón de pánico?</IonText>
-
-          <div className="confirm-button-group">
-            <IonButton
-              expand="block"
-              color="danger"
-              onClick={confirmPanicButton}
-            >
-              Sí
-            </IonButton>
-            <IonButton
-              expand="block"
-              color="primary"
-              onClick={() => setOpenPanicConfirmModal(false)}
-            >
-              No
-            </IonButton>
-          </div>
-        </div>
-      </IonModal>
     </IonPage>
   );
 };
