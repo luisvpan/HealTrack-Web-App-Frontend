@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Redirect, Route, useLocation } from 'react-router-dom';
 import {
   IonApp,
@@ -28,7 +28,7 @@ import FormularyTab from './pages/appForm';
 
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
-import store from './store';
+import store, { useAppSelector } from './store';
 import { AllRoles } from '../src/types';
 import { initOneSignal } from './services/one-signal/one-signal.service';
 import { getUnreadMessageNotificationsCount } from './services/messageNotifications/get-message-notifications-unread';
@@ -48,6 +48,10 @@ import '@ionic/react/css/palettes/dark.system.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './theme/variables.css';
 import { Host } from 'ionicons/dist/types/stencil-public-runtime';
+
+//Sockets
+import { io, Socket } from 'socket.io-client';
+import { API_BASE_URL } from "../src/config/constants";
 
 setupIonicReact();
 
@@ -72,8 +76,56 @@ const AppContent: React.FC = () => {
   const [panicUnreadCount, setPanicUnreadCount] = useState(0);
   const token = store.getState().auth.token;
   const role = store.getState().auth.user?.role;
+  const socket = useRef<Socket | null>(null);
+  const user = useAppSelector((state) => state.auth.user);
+  const URL = API_BASE_URL.endsWith("/api/v1")
+    ? API_BASE_URL.replace("/api/v1", "")
+    : API_BASE_URL; 
 
-  // Callback to fetch unread message notifications count
+  // Inicializar conexión de socket
+  useEffect(() => {
+    if (!socket.current && URL) {
+      socket.current = io(URL, {
+        extraHeaders: {
+          Authorization: 'Bearer ' + token,
+        },
+      });
+
+      socket.current.on('connect', () => {
+        console.log('Connected to socket server');
+      });
+
+      socket.current.on('unread_notifications_count', (data) => {
+        if (user !== null && user.id !== undefined) {
+          const currentUserUnreadCount = data.data[user.id];
+          if (currentUserUnreadCount !== undefined) {
+            console.log('New unread count:', currentUserUnreadCount);
+            setUnreadCount(currentUserUnreadCount);
+          }
+        }
+      });
+
+      socket.current.on('unread_panic_notifications_count', (data) => {
+        if (user !== null && user.id !== undefined) {
+          const currentUserUnreadCount = data.data[user.id];
+          if (currentUserUnreadCount !== undefined) {
+            console.log('New unread count:', currentUserUnreadCount);
+            setUnreadCount(currentUserUnreadCount);
+          }
+        }
+      });
+
+      socket.current.on('disconnect', () => {
+        console.log('Disconnected from socket server');
+      });
+
+      return () => {
+        socket.current?.disconnect();
+      };
+    }
+  }, [token, URL]);
+
+  // Fetch unread counts inicialmente
   const fetchUnreadMessageNotificationsCount = useCallback(async () => {
     const userId = store.getState().auth.user?.id;
     if (userId) {
@@ -86,13 +138,12 @@ const AppContent: React.FC = () => {
     }
   }, []);
 
-  // Callback to fetch unread general notifications count
   const fetchUnreadNotificationsCount = useCallback(async () => {
     const userId = store.getState().auth.user?.id;
     if (userId) {
       try {
         const count = await getUnreadNotificationsCount(userId);
-        setPanicUnreadCount(count); // Assuming panic notifications are a subset of notifications
+        setPanicUnreadCount(count);
       } catch (error) {
         console.error('Error fetching unread notifications count:', error);
       }
@@ -101,19 +152,7 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     fetchUnreadMessageNotificationsCount();
-    const intervalId1 = setInterval(() => {
-      fetchUnreadMessageNotificationsCount();
-    }, 30000); // 30 segundos
-
     fetchUnreadNotificationsCount();
-    const intervalId2 = setInterval(() => {
-      fetchUnreadNotificationsCount();
-    }, 30000); // 30 segundos
-
-    return () => {
-      clearInterval(intervalId1);
-      clearInterval(intervalId2);
-    };
   }, [fetchUnreadMessageNotificationsCount, fetchUnreadNotificationsCount]);
 
   return (
@@ -156,9 +195,6 @@ const AppContent: React.FC = () => {
             <Route exact path="/chat-bot">
               <FAQList />
             </Route>
-            {/**RecommendationsAppPage
-             * CreateAppForm
-             */}
             <Route exact path="/satistaction-formulary">
               <FormularyTab />
             </Route>
